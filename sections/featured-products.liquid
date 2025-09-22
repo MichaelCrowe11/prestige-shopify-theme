@@ -1,0 +1,301 @@
+{% comment %}
+  Featured Products Section
+  Author: Michael Benjamin Crowe
+{% endcomment %}
+
+<section class="featured-products section section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="featured-products">
+  <div class="container">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="section__header">
+        {% if section.settings.subheading != blank %}
+          <p class="section__subheading" data-animate>{{ section.settings.subheading }}</p>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <h2 class="section__heading" data-animate>{{ section.settings.heading }}</h2>
+        {% endif %}
+
+        {% if section.settings.show_view_all %}
+          <a href="{{ section.settings.collection.url }}" class="section__link" data-animate>
+            {{ 'collections.general.view_collection' | t }}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M5 10h10M10 5l5 5-5 5"/>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="featured-products__grid grid grid--{{ section.settings.products_per_row }}-col" data-animate>
+      {% if section.settings.collection != blank %}
+        {% for product in section.settings.collection.products limit: section.settings.products_to_show %}
+          {% render 'product-card',
+            product: product,
+            show_quick_add: section.settings.show_quick_add,
+            show_second_image: section.settings.show_second_image,
+            show_vendor: section.settings.show_vendor,
+            show_rating: section.settings.show_rating,
+            show_color_swatches: section.settings.show_color_swatches
+          %}
+        {% endfor %}
+      {% else %}
+        {% for i in (1..section.settings.products_to_show) %}
+          <div class="card product-card product-card--placeholder">
+            <div class="card__image">
+              {{ 'product-' | append: i | placeholder_svg_tag }}
+            </div>
+            <div class="card__content">
+              <h3 class="card__title">{{ 'products.general.example_title' | t | default: 'Example Product' }}</h3>
+              <p class="card__price">$99.00</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% if section.settings.show_carousel %}
+      <div class="featured-products__carousel swiper" data-carousel>
+        <div class="swiper-wrapper">
+          {% if section.settings.collection != blank %}
+            {% for product in section.settings.collection.products limit: section.settings.products_to_show %}
+              <div class="swiper-slide">
+                {% render 'product-card',
+                  product: product,
+                  show_quick_add: section.settings.show_quick_add,
+                  show_second_image: section.settings.show_second_image,
+                  show_vendor: section.settings.show_vendor,
+                  show_rating: section.settings.show_rating,
+                  show_color_swatches: section.settings.show_color_swatches
+                %}
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-pagination"></div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .featured-products {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  .section__header {
+    text-align: {{ section.settings.heading_alignment }};
+    margin-bottom: 3rem;
+  }
+
+  .section__subheading {
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .section__heading {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1rem;
+  }
+
+  .section__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: underline;
+    transition: gap var(--animation-duration) var(--animation-timing);
+  }
+
+  .section__link:hover {
+    gap: 1rem;
+    opacity: 1;
+  }
+
+  .featured-products__carousel {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .featured-products__grid {
+      display: none;
+    }
+
+    .featured-products__carousel {
+      display: block;
+    }
+
+    .swiper-slide {
+      padding: 0 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.querySelector('.section-{{ section.id }} [data-carousel]');
+
+    if (carousel && typeof Swiper !== 'undefined') {
+      new Swiper(carousel, {
+        slidesPerView: 1.2,
+        spaceBetween: 20,
+        navigation: {
+          prevEl: '.swiper-button-prev',
+          nextEl: '.swiper-button-next',
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
+        breakpoints: {
+          480: {
+            slidesPerView: 2.2,
+            spaceBetween: 20
+          },
+          768: {
+            slidesPerView: 3,
+            spaceBetween: 30
+          },
+          1024: {
+            slidesPerView: {{ section.settings.products_per_row }},
+            spaceBetween: 30
+          }
+        }
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Featured products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"View all\" link",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_carousel",
+      "label": "Enable carousel on mobile",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show quick add button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_second_image",
+      "label": "Show second image on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show product rating",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_swatches",
+      "label": "Show color swatches",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured products",
+      "settings": {
+        "heading": "Best Sellers",
+        "products_to_show": 4,
+        "products_per_row": 4
+      }
+    }
+  ]
+}
+{% endschema %}

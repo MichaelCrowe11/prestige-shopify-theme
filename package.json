@@ -1,0 +1,26 @@
+{
+  "name": "prestige-theme",
+  "version": "1.0.0",
+  "description": "Premium Shopify theme for luxury brands",
+  "main": "index.js",
+  "scripts": {
+    "dev": "shopify theme dev",
+    "build": "shopify theme build",
+    "push": "shopify theme push",
+    "pull": "shopify theme pull",
+    "package": "shopify theme package"
+  },
+  "keywords": [
+    "shopify",
+    "theme",
+    "luxury",
+    "premium",
+    "ecommerce"
+  ],
+  "author": "Prestige Theme",
+  "license": "Proprietary",
+  "devDependencies": {
+    "@shopify/cli": "^3.0.0",
+    "@shopify/theme": "^3.0.0"
+  }
+}

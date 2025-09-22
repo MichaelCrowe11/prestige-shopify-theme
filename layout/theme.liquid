@@ -1,0 +1,136 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
+  {%- endif -%}
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif -%}
+    {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  {% render 'meta-tags' %}
+
+  <script src="{{ 'global.js' | asset_url }}" defer></script>
+  <script src="{{ 'prestige.js' | asset_url }}" defer></script>
+
+  {{ content_for_header }}
+
+  {%- liquid
+    assign body_font_light = settings.type_body_font | font_modify: 'weight', '300'
+    assign body_font_regular = settings.type_body_font | font_modify: 'weight', 'normal'
+    assign body_font_medium = settings.type_body_font | font_modify: 'weight', '500'
+    assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
+    assign heading_font = settings.type_header_font | font_modify: 'weight', settings.type_header_font_weight
+  -%}
+
+  <style>
+    :root {
+      --color-primary: {{ settings.color_primary }};
+      --color-secondary: {{ settings.color_secondary }};
+      --color-accent: {{ settings.color_accent }};
+      --color-background: {{ settings.color_background }};
+      --color-background-secondary: {{ settings.color_background_secondary }};
+      --color-text: {{ settings.color_text }};
+      --color-text-light: {{ settings.color_text_light }};
+      --color-border: {{ settings.color_text | color_modify: 'alpha', 0.15 }};
+      --color-overlay: {{ settings.color_text | color_modify: 'alpha', 0.5 }};
+
+      --font-body: {{ body_font_regular | font_face: font_display: 'swap' }};
+      --font-body-weight: {{ body_font_regular.weight }};
+      --font-body-style: {{ body_font_regular.style }};
+      --font-body-size: {{ settings.type_body_base_size }}px;
+
+      --font-heading: {{ heading_font | font_face: font_display: 'swap' }};
+      --font-heading-weight: {{ heading_font.weight }};
+      --font-heading-style: {{ heading_font.style }};
+      --font-heading-size: {{ settings.type_header_base_size }}px;
+
+      --page-width: {% if settings.page_width == 'full' %}100%{% else %}{{ settings.page_width }}px{% endif %};
+      --grid-spacing: {{ settings.spacing_grid }}px;
+      --section-spacing: {{ settings.spacing_sections }}px;
+
+      --animation-duration: 400ms;
+      --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    {{ body_font_light | font_face: font_display: 'swap' }}
+    {{ body_font_regular | font_face: font_display: 'swap' }}
+    {{ body_font_medium | font_face: font_display: 'swap' }}
+    {{ body_font_bold | font_face: font_display: 'swap' }}
+    {{ heading_font | font_face: font_display: 'swap' }}
+  </style>
+
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ 'prestige.css' | asset_url | stylesheet_tag }}
+
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+
+    window.theme = {
+      strings: {
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }},
+        cartEmpty: {{ 'cart.general.empty' | t | json }},
+        cartTermsConfirmation: {{ 'cart.general.terms_confirmation' | t | json }}
+      },
+      moneyFormat: {{ shop.money_format | json }},
+      cartType: {{ settings.cart_type | json }}
+    };
+  </script>
+
+  {%- if request.page_type == 'product' -%}
+    <script type="application/ld+json">
+      {{ product | structured_data }}
+    </script>
+  {%- endif -%}
+</head>
+
+<body class="template-{{ request.page_type | handle }} {% if customer %}customer-logged-in{% endif %} {% if settings.animations_enabled %}animations-enabled{% endif %}">
+  <a class="skip-to-content-link visually-hidden" href="#MainContent">
+    {{ "general.accessibility.skip_to_content" | t }}
+  </a>
+
+  {% render 'cart-drawer' %}
+  {% render 'search-modal' %}
+  {% render 'quick-shop-modal' %}
+
+  {% section 'header' %}
+
+  <main id="MainContent" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+
+  <div class="loading-overlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  {% render 'script-tags', layout: 'theme' %}
+
+  <script>
+    window.Shopify = window.Shopify || {};
+    window.Shopify.shop = {{ shop | json }};
+    window.Shopify.locale = {{ request.locale.iso_code | json }};
+    window.Shopify.currency = {{ shop.currency | json }};
+    window.Shopify.country = {{ localization.country.iso_code | json }};
+  </script>
+</body>
+</html>

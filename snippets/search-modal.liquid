@@ -1,0 +1,114 @@
+{% comment %}
+  Search Modal Component
+  Author: Michael Benjamin Crowe
+{% endcomment %}
+
+<div class="modal search-modal" data-search-modal data-modal="search">
+  <div class="modal__inner search-modal__inner">
+    <button class="modal__close" data-modal-close aria-label="{{ 'general.accessibility.close' | t }}">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <div class="search-modal__content">
+      <h2 class="search-modal__title">{{ 'general.search.title' | t | default: 'Search' }}</h2>
+
+      <form class="search-modal__form" action="{{ routes.search_url }}" method="get" data-search-form>
+        <div class="search-modal__input-wrapper">
+          <input type="search"
+                 name="q"
+                 class="search-modal__input"
+                 placeholder="{{ 'general.search.placeholder' | t }}"
+                 autocomplete="off"
+                 data-search-input>
+          <button type="submit" class="search-modal__submit">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <span class="visually-hidden">{{ 'general.search.submit' | t }}</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="search-modal__results" data-search-results></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .search-modal__inner {
+    max-width: 800px;
+    width: 90%;
+    padding: 2rem;
+  }
+
+  .search-modal__title {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .search-modal__form {
+    margin-bottom: 2rem;
+  }
+
+  .search-modal__input-wrapper {
+    display: flex;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-background);
+  }
+
+  .search-modal__input {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    background: transparent;
+    font-size: 1.125rem;
+  }
+
+  .search-modal__input:focus {
+    outline: none;
+  }
+
+  .search-modal__submit {
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+  }
+
+  .search-modal__results {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .search-result {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--animation-duration) var(--animation-timing);
+  }
+
+  .search-result:hover {
+    background-color: var(--color-background-secondary);
+  }
+
+  .search-result img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+  }
+
+  .search-result__details h4 {
+    margin-bottom: 0.25rem;
+  }
+
+  .search-result__details p {
+    margin: 0;
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+  }
+</style>

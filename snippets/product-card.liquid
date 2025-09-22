@@ -1,0 +1,235 @@
+{% comment %}
+  Product Card Snippet
+  Author: Michael Benjamin Crowe
+
+  Parameters:
+  - product: Product object
+  - show_quick_add: Boolean
+  - show_second_image: Boolean
+  - show_vendor: Boolean
+  - show_rating: Boolean
+  - show_color_swatches: Boolean
+{% endcomment %}
+
+<div class="card product-card" data-product-card data-product-id="{{ product.id }}">
+  <div class="card__image">
+    <a href="{{ product.url }}">
+      {% if product.featured_image %}
+        <img src="{{ product.featured_image | image_url: width: 600 }}"
+             alt="{{ product.featured_image.alt | escape }}"
+             loading="lazy"
+             class="product-card__image product-card__image--primary">
+
+        {% if show_second_image and product.images[1] %}
+          <img src="{{ product.images[1] | image_url: width: 600 }}"
+               alt="{{ product.images[1].alt | escape }}"
+               loading="lazy"
+               class="product-card__image product-card__image--secondary">
+        {% endif %}
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag }}
+      {% endif %}
+    </a>
+
+    {% if product.compare_at_price > product.price %}
+      <span class="badge badge--sale">
+        {% assign sale_percentage = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+        -{{ sale_percentage }}%
+      </span>
+    {% elsif product.created_at > 30 | days | ago %}
+      <span class="badge badge--new">New</span>
+    {% endif %}
+
+    {% unless product.available %}
+      <span class="badge badge--soldout">Sold Out</span>
+    {% endunless %}
+
+    {% if show_quick_add %}
+      <div class="product-card__actions">
+        <button class="product-card__quick-add button button--secondary button--small"
+                data-quick-shop
+                data-product-handle="{{ product.handle }}"
+                {% unless product.available %}disabled{% endunless %}>
+          {{ 'products.product.quick_shop' | t }}
+        </button>
+
+        <button class="product-card__wishlist"
+                data-wishlist-toggle
+                data-product-id="{{ product.id }}"
+                data-product-title="{{ product.title | escape }}"
+                data-product-image="{{ product.featured_image | image_url: width: 300 }}"
+                data-product-price="{{ product.price | money }}"
+                data-product-url="{{ product.url }}"
+                aria-label="Add to wishlist">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M17.367 3.842a4.583 4.583 0 00-6.484 0L10 4.725l-.883-.883a4.584 4.584 0 00-6.484 6.484l.884.883L10 17.692l6.483-6.483.884-.883a4.584 4.584 0 000-6.484z"/>
+          </svg>
+        </button>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="card__content">
+    {% if show_vendor and product.vendor %}
+      <p class="product-card__vendor">{{ product.vendor }}</p>
+    {% endif %}
+
+    <h3 class="card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+
+    {% if show_rating %}
+      <div class="product-card__rating">
+        {% render 'product-rating', product: product %}
+      </div>
+    {% endif %}
+
+    <div class="card__price">
+      {% if product.compare_at_price > product.price %}
+        <span class="card__price--sale">{{ product.price | money }}</span>
+        <span class="card__price--compare">{{ product.compare_at_price | money }}</span>
+      {% else %}
+        <span>{{ product.price | money }}</span>
+      {% endif %}
+
+      {% if product.price_varies %}
+        <span class="card__price--from">{{ 'products.general.from_price' | t }}</span>
+      {% endif %}
+    </div>
+
+    {% if show_color_swatches %}
+      {% assign color_option = product.options_by_name['Color'] %}
+      {% if color_option %}
+        <div class="product-card__swatches">
+          {% for value in color_option.values limit: 5 %}
+            {% assign color_handle = value | handle %}
+            <span class="product-card__swatch"
+                  style="background-color: {{ color_handle }};"
+                  title="{{ value }}"
+                  data-color="{{ value }}">
+              <span class="visually-hidden">{{ value }}</span>
+            </span>
+          {% endfor %}
+
+          {% if color_option.values.size > 5 %}
+            <span class="product-card__swatch-more">
+              +{{ color_option.values.size | minus: 5 }}
+            </span>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .product-card {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-card__image--secondary {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity var(--animation-duration) var(--animation-timing);
+  }
+
+  .product-card:hover .product-card__image--secondary {
+    opacity: 1;
+  }
+
+  .product-card__actions {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all var(--animation-duration) var(--animation-timing);
+  }
+
+  .product-card:hover .product-card__actions {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .product-card__quick-add {
+    flex: 1;
+  }
+
+  .product-card__wishlist {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: all var(--animation-duration) var(--animation-timing);
+  }
+
+  .product-card__wishlist:hover,
+  .product-card__wishlist.is-active {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-background);
+  }
+
+  .product-card__wishlist.is-active svg {
+    fill: currentColor;
+  }
+
+  .product-card__vendor {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-light);
+    margin-bottom: 0.25rem;
+  }
+
+  .product-card__rating {
+    margin: 0.5rem 0;
+  }
+
+  .product-card__swatches {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.75rem;
+  }
+
+  .product-card__swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: transform var(--animation-duration) var(--animation-timing);
+  }
+
+  .product-card__swatch:hover {
+    transform: scale(1.2);
+  }
+
+  .product-card__swatch-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 0.625rem;
+    color: var(--color-text-light);
+  }
+</style>

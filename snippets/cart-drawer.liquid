@@ -1,0 +1,111 @@
+{% comment %}
+  Cart Drawer Component
+  Author: Michael Benjamin Crowe
+{% endcomment %}
+
+<div class="cart-drawer" data-cart-drawer>
+  <div class="cart-drawer__header">
+    <h2 class="cart-drawer__title">{{ 'cart.general.title' | t }}</h2>
+    <button class="cart-drawer__close" data-cart-close aria-label="{{ 'general.accessibility.close' | t }}">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  {% if settings.show_free_shipping_bar %}
+    <div class="cart-drawer__shipping-bar" data-free-shipping-bar data-threshold="{{ settings.free_shipping_threshold }}">
+      <div class="shipping-bar__progress">
+        <div class="shipping-bar__progress-fill" data-progress></div>
+      </div>
+      <p class="shipping-bar__message" data-message>{{ 'cart.general.free_shipping_progress' | t: amount: '$0' }}</p>
+    </div>
+  {% endif %}
+
+  <div class="cart-drawer__items" data-cart-items>
+    <p class="cart-drawer__empty">{{ 'cart.general.empty' | t }}</p>
+  </div>
+
+  <div class="cart-drawer__footer">
+    <div class="cart-drawer__subtotal">
+      <span>{{ 'cart.general.subtotal' | t }}</span>
+      <span data-cart-subtotal>{{ cart.total_price | money }}</span>
+    </div>
+
+    {% if settings.show_cart_note %}
+      <div class="cart-drawer__note">
+        <label for="cart-note">{{ 'cart.general.note' | t }}</label>
+        <textarea id="cart-note" name="note" placeholder="{{ 'cart.general.note_placeholder' | t }}">{{ cart.note }}</textarea>
+      </div>
+    {% endif %}
+
+    <div class="cart-drawer__actions">
+      <a href="{{ routes.cart_url }}" class="button button--secondary">
+        {{ 'cart.general.view_cart' | t | default: 'View Cart' }}
+      </a>
+      <a href="{{ routes.cart_checkout_url }}" class="button button--primary">
+        {{ 'cart.general.checkout' | t }}
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="cart-drawer__overlay" data-cart-overlay></div>
+
+<style>
+  .cart-drawer__overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
+  .cart-drawer.is-open ~ .cart-drawer__overlay {
+    display: block;
+  }
+
+  .shipping-bar__progress {
+    height: 4px;
+    background-color: var(--color-border);
+    border-radius: 2px;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+  }
+
+  .shipping-bar__progress-fill {
+    height: 100%;
+    background-color: var(--color-accent);
+    transition: width var(--animation-duration) var(--animation-timing);
+  }
+
+  .shipping-bar__message {
+    font-size: 0.875rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .cart-drawer__note {
+    margin-bottom: 1rem;
+  }
+
+  .cart-drawer__note label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .cart-drawer__note textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    font-family: inherit;
+    font-size: 0.875rem;
+    resize: vertical;
+  }
+</style>

@@ -1,0 +1,64 @@
+{% comment %}
+  Product Rating Stars
+  Author: Michael Benjamin Crowe
+{% endcomment %}
+
+{% assign rating = product.metafields.reviews.rating | default: 0 %}
+{% assign rating_count = product.metafields.reviews.rating_count | default: 0 %}
+
+{% if rating > 0 %}
+  <div class="product-rating" data-rating="{{ rating }}">
+    <div class="product-rating__stars" aria-label="{{ rating }} out of 5 stars">
+      {% for i in (1..5) %}
+        {% if rating >= i %}
+          <svg class="star star--filled" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        {% elsif rating > i | minus: 1 %}
+          <svg class="star star--half" width="16" height="16" viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="half-{{ i }}">
+                <stop offset="50%" stop-color="currentColor"/>
+                <stop offset="50%" stop-color="transparent"/>
+              </linearGradient>
+            </defs>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#half-{{ i }})" stroke="currentColor" stroke-width="1"/>
+          </svg>
+        {% else %}
+          <svg class="star star--empty" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% if rating_count > 0 %}
+      <span class="product-rating__count">({{ rating_count }})</span>
+    {% endif %}
+  </div>
+{% endif %}
+
+<style>
+  .product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .product-rating__stars {
+    display: flex;
+    gap: 0.125rem;
+  }
+
+  .star {
+    color: var(--color-accent, #D4AF37);
+  }
+
+  .star--empty {
+    opacity: 0.3;
+  }
+
+  .product-rating__count {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+</style>

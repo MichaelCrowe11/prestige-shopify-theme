@@ -1,0 +1,354 @@
+{% comment %}
+  Hero Section with Video Background
+  Author: Michael Benjamin Crowe
+{% endcomment %}
+
+<section class="hero hero--video section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="hero-video">
+  <div class="hero__media">
+    {% if section.settings.video_url != blank %}
+      <video
+        class="hero__video"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster="{{ section.settings.video_poster | image_url: width: 1920 }}"
+      >
+        <source src="{{ section.settings.video_url }}" type="video/mp4">
+      </video>
+    {% elsif section.settings.image != blank %}
+      {{ section.settings.image | image_url: width: 1920 | image_tag: class: 'hero__image', loading: 'eager' }}
+    {% else %}
+      <div class="hero__placeholder">
+        {{ 'lifestyle-1' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+
+    <div class="hero__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}"></div>
+  </div>
+
+  <div class="hero__content">
+    <div class="container">
+      <div class="hero__inner" style="text-align: {{ section.settings.text_alignment }}">
+        {% if section.settings.subheading != blank %}
+          <p class="hero__subheading" data-animate>{{ section.settings.subheading }}</p>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <h1 class="hero__heading" data-animate>{{ section.settings.heading }}</h1>
+        {% endif %}
+
+        {% if section.settings.text != blank %}
+          <div class="hero__text" data-animate>{{ section.settings.text }}</div>
+        {% endif %}
+
+        {% if section.settings.button_label != blank %}
+          <div class="hero__buttons" data-animate>
+            <a href="{{ section.settings.button_link }}" class="button button--primary button--large">
+              {{ section.settings.button_label }}
+            </a>
+
+            {% if section.settings.button_label_2 != blank %}
+              <a href="{{ section.settings.button_link_2 }}" class="button button--secondary button--large">
+                {{ section.settings.button_label_2 }}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if section.settings.show_scroll_indicator %}
+    <div class="hero__scroll-indicator" data-animate>
+      <span>{{ 'general.accessibility.scroll' | t | default: 'Scroll' }}</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M19 12l-7 7-7-7"/>
+      </svg>
+    </div>
+  {% endif %}
+</section>
+
+<style>
+  .hero--video {
+    position: relative;
+    height: {{ section.settings.height }}vh;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero__media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .hero__video,
+  .hero__image,
+  .hero__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ section.settings.overlay_color }};
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    color: {{ section.settings.text_color }};
+    width: 100%;
+  }
+
+  .hero__inner {
+    max-width: {{ section.settings.content_width }}px;
+    margin: 0 auto;
+  }
+
+  .hero__subheading {
+    font-size: 1.125rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .hero__heading {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__text {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+  }
+
+  .hero__buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: {{ section.settings.text_alignment }};
+  }
+
+  .hero__scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: {{ section.settings.text_color }};
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    40% {
+      transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+      transform: translateX(-50%) translateY(-5px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero--video {
+      height: {{ section.settings.mobile_height }}vh;
+    }
+
+    .hero__heading {
+      font-size: clamp(2rem, 8vw, 3rem);
+    }
+
+    .hero__text {
+      font-size: 1rem;
+    }
+
+    .hero__buttons {
+      flex-direction: column;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Hero with video",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "Use a direct MP4 video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster",
+      "label": "Video poster image",
+      "info": "Shown while video loads"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Fallback image",
+      "info": "Used if no video is provided"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Welcome to"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Luxury Redefined"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Experience the epitome of elegance with our curated collection</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Second button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Second button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Section height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content width",
+      "min": 600,
+      "max": 1200,
+      "step": 100,
+      "unit": "px",
+      "default": 800
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_indicator",
+      "label": "Show scroll indicator",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero with video"
+    }
+  ]
+}
+{% endschema %}

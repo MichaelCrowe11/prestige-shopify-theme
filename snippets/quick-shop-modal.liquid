@@ -1,0 +1,71 @@
+{% comment %}
+  Quick Shop Modal Component
+  Author: Michael Benjamin Crowe
+{% endcomment %}
+
+<div class="modal quick-shop-modal" data-quick-shop-modal data-modal="quick-shop">
+  <div class="modal__inner quick-shop-modal__inner">
+    <button class="modal__close" data-modal-close aria-label="{{ 'general.accessibility.close' | t }}">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <div class="quick-shop-modal__content" data-quick-shop-content>
+      <div class="loading-spinner"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .quick-shop-modal__inner {
+    max-width: 1200px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .quick-shop-modal__content {
+    padding: 2rem;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quick-shop-modal__product {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .quick-shop-modal__product {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .quick-shop-modal__media img {
+    width: 100%;
+    height: auto;
+  }
+
+  .quick-shop-modal__info {
+    padding: 1rem;
+  }
+
+  .quick-shop-modal__title {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .quick-shop-modal__price {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quick-shop-modal__form {
+    margin-top: 2rem;
+  }
+</style>

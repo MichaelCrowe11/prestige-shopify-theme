@@ -1,0 +1,58 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-video",
+      "settings": {
+        "heading": "Luxury Redefined",
+        "subheading": "Welcome to Prestige",
+        "text": "<p>Experience the epitome of elegance with our curated collection of premium products</p>",
+        "button_label": "Shop Collection",
+        "button_link": "/collections/all",
+        "height": 90,
+        "text_alignment": "center",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30
+      }
+    },
+    "featured_products": {
+      "type": "featured-products",
+      "settings": {
+        "heading": "Featured Collection",
+        "subheading": "Best Sellers",
+        "products_to_show": 4,
+        "products_per_row": 4,
+        "show_quick_add": true,
+        "show_second_image": true,
+        "show_color_swatches": true
+      }
+    },
+    "collection_showcase": {
+      "type": "collection-list",
+      "settings": {
+        "heading": "Shop by Category",
+        "collections_to_show": 3
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "heading": "What Our Customers Say"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Stay in Touch",
+        "subheading": "Subscribe to receive exclusive offers and the latest news"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured_products",
+    "collection_showcase",
+    "testimonials",
+    "newsletter"
+  ]
+}
