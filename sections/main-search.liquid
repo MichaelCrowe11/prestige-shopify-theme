@@ -1,0 +1,77 @@
+<div class="section">
+  <div class="container">
+    <h1>{{ 'general.search.title' | t | default: 'Search' }}</h1>
+
+    <form action="{{ routes.search_url }}" method="get" class="search-form">
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}">
+      <button type="submit" class="button button--primary">{{ 'general.search.submit' | t }}</button>
+    </form>
+
+    {% if search.performed %}
+      {% if search.results_count > 0 %}
+        <p>{{ search.results_count }} {% if search.results_count == 1 %}result{% else %}results{% endif %} for "{{ search.terms }}"</p>
+
+        <div class="search-results grid grid--3-col">
+          {% paginate search.results by 24 %}
+            {% for item in search.results %}
+              {% case item.object_type %}
+                {% when 'product' %}
+                  {% render 'product-card', product: item %}
+                {% when 'article' %}
+                  <article>
+                    <h3><a href="{{ item.url }}">{{ item.title }}</a></h3>
+                    <p>{{ item.excerpt | strip_html | truncate: 150 }}</p>
+                  </article>
+                {% when 'page' %}
+                  <article>
+                    <h3><a href="{{ item.url }}">{{ item.title }}</a></h3>
+                    <p>{{ item.content | strip_html | truncate: 150 }}</p>
+                  </article>
+              {% endcase %}
+            {% endfor %}
+
+            {% if paginate.pages > 1 %}
+              <div class="pagination">
+                {{ paginate | default_pagination }}
+              </div>
+            {% endif %}
+          {% endpaginate %}
+        </div>
+      {% else %}
+        <p>{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .search-form {
+    display: flex;
+    gap: 1rem;
+    max-width: 600px;
+    margin: 2rem auto;
+  }
+
+  .search-form input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    font-size: 1rem;
+  }
+
+  .search-results {
+    margin-top: 2rem;
+  }
+
+  .pagination {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 2rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Main search"
+}
+{% endschema %}

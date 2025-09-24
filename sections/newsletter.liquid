@@ -1,0 +1,296 @@
+{% comment %}
+  Newsletter Section
+  Author: Michael Benjamin Crowe
+{% endcomment %}
+
+<section class="section section--newsletter">
+  <div class="container">
+    <div class="newsletter-wrapper">
+      <div class="newsletter-content">
+        {% if section.settings.heading != blank %}
+          <h2 class="newsletter__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <p class="newsletter__subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+
+        {% form 'customer', class: 'newsletter-form' %}
+          {% if form.posted_successfully? %}
+            <div class="newsletter-form__message newsletter-form__message--success">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              {{ 'general.newsletter.success' | t }}
+            </div>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="newsletter-form__message newsletter-form__message--error">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              {{ form.errors | first }}
+            </div>
+          {% endif %}
+
+          <div class="newsletter-form__fields">
+            <div class="newsletter-form__field">
+              <input
+                type="email"
+                name="contact[email]"
+                id="newsletter-email"
+                placeholder="{{ 'general.newsletter.email_placeholder' | t }}"
+                class="newsletter-form__input"
+                autocomplete="email"
+                required>
+              <input type="hidden" name="contact[tags]" value="newsletter">
+            </div>
+
+            <button type="submit" class="newsletter-form__submit button button--primary">
+              {{ 'general.newsletter.submit' | t }}
+            </button>
+          </div>
+
+          {% if section.settings.show_privacy_text %}
+            <p class="newsletter-form__privacy">
+              {{ section.settings.privacy_text | default: 'We respect your privacy and will never share your email address.' }}
+            </p>
+          {% endif %}
+        {% endform %}
+      </div>
+
+      {% if section.settings.show_social_links %}
+        <div class="newsletter-social">
+          <p class="newsletter-social__title">{{ section.settings.social_title | default: 'Follow us' }}</p>
+          <div class="newsletter-social__links">
+            {% if settings.social_facebook_link != blank %}
+              <a href="{{ settings.social_facebook_link }}" class="newsletter-social__link" target="_blank" rel="noopener" aria-label="Facebook">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+            {% endif %}
+
+            {% if settings.social_twitter_link != blank %}
+              <a href="{{ settings.social_twitter_link }}" class="newsletter-social__link" target="_blank" rel="noopener" aria-label="Twitter">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                </svg>
+              </a>
+            {% endif %}
+
+            {% if settings.social_instagram_link != blank %}
+              <a href="{{ settings.social_instagram_link }}" class="newsletter-social__link" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.596-3.205-1.53l1.53-1.297c.458.596 1.173.99 1.988.99.815 0 1.53-.394 1.988-.99l1.53 1.297c-.757.934-1.908 1.53-3.205 1.53zm7.138 0c-1.297 0-2.448-.596-3.205-1.53l1.53-1.297c.458.596 1.173.99 1.988.99.815 0 1.53-.394 1.988-.99l1.53 1.297c-.757.934-1.908 1.53-3.205 1.53z"/>
+                </svg>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section--newsletter {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+  }
+
+  .newsletter-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+
+  .newsletter-content {
+    flex: 1;
+    max-width: 600px;
+  }
+
+  .newsletter__heading {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .newsletter__subheading {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .newsletter-form__message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .newsletter-form__message--success {
+    background-color: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+  }
+
+  .newsletter-form__message--error {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
+  .newsletter-form__fields {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .newsletter-form__field {
+    flex: 1;
+  }
+
+  .newsletter-form__input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: all var(--animation-duration) var(--animation-timing);
+  }
+
+  .newsletter-form__input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .newsletter-form__input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .newsletter-form__submit {
+    padding: 1rem 2rem;
+    white-space: nowrap;
+    border-radius: 50px;
+  }
+
+  .newsletter-form__privacy {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    line-height: 1.4;
+  }
+
+  .newsletter-social {
+    text-align: center;
+  }
+
+  .newsletter-social__title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .newsletter-social__links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .newsletter-social__link {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: white;
+    transition: all var(--animation-duration) var(--animation-timing);
+  }
+
+  .newsletter-social__link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .newsletter-wrapper {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .newsletter__heading {
+      font-size: 2rem;
+    }
+
+    .newsletter-form__fields {
+      flex-direction: column;
+    }
+
+    .newsletter-form__submit {
+      width: 100%;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Stay in Touch"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Subscribe to receive exclusive offers and the latest news"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_privacy_text",
+      "label": "Show privacy text",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "privacy_text",
+      "label": "Privacy text",
+      "default": "We respect your privacy and will never share your email address.",
+      "info": "Only shown if 'Show privacy text' is enabled"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_links",
+      "label": "Show social links",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "social_title",
+      "label": "Social links title",
+      "default": "Follow us"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

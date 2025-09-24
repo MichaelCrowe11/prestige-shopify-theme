@@ -1,0 +1,37 @@
+<div class="collection-banner">
+  <div class="container">
+    <h1 class="collection-banner__title">{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <div class="collection-banner__description">
+        {{ collection.description }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .collection-banner {
+    background-color: var(--color-background-secondary);
+    padding: 3rem 0;
+    text-align: center;
+  }
+
+  .collection-banner__title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .collection-banner__description {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--color-text-light);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection banner"
+}
+{% endschema %}

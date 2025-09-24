@@ -181,4 +181,4 @@ This theme is licensed for use on a single Shopify store. Redistribution or resa
 
 ---
 
-© 2024 Michael Benjamin Crowe. All rights reserved.
+© 2025 Michael Benjamin Crowe. All rights reserved.

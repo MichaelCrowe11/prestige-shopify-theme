@@ -1,0 +1,76 @@
+# Development files
+node_modules/
+*.log
+*.map
+.env
+.env.*
+
+# Version control
+.git/
+.gitignore
+
+# Build files
+dist/
+build/
+*.zip
+*.tar.gz
+
+# Documentation
+README.md
+CHANGELOG.md
+SHOPIFY_OPTIMIZATION_REPORT.md
+docs/
+
+# Development configs
+package.json
+package-lock.json
+yarn.lock
+webpack.config.js
+rollup.config.js
+gulpfile.js
+Gruntfile.js
+
+# Testing
+test/
+tests/
+*.test.js
+*.spec.js
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Custom scripts
+scripts/
+tools/
+
+# Design files
+*.psd
+*.ai
+*.sketch
+*.fig
+*.xd
+
+# Backup files
+*.backup
+backups/
+_backup/
+
+# Local development
+.shopify/
+.theme-check.yml
+theme-check-disable.yml

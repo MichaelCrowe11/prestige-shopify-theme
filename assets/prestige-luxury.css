@@ -1,0 +1,735 @@
+/**
+ * Prestige Theme - Luxury Design System
+ * Based on psychological principles of luxury branding
+ * Author: Michael Benjamin Crowe
+ * Version: 2.0.0
+ */
+
+/* ==========================================================================
+   LUXURY COLOR PSYCHOLOGY SYSTEM
+   Based on neuromarketing research showing 90% of first impressions are color-based
+   ========================================================================== */
+
+:root {
+  /* Primary Luxury Palette - Triggers exclusivity and sophistication */
+  --color-noir: #0A0A0A;           /* Deep black - power, sophistication, exclusivity */
+  --color-charcoal: #1C1C1C;       /* Soft black - elegance without harshness */
+  --color-obsidian: #2A2A2A;       /* Medium black - depth and mystery */
+
+  /* Accent Colors - Emotional triggers */
+  --color-champagne: #D4AF37;      /* Gold - wealth, achievement, premium quality */
+  --color-burgundy: #6B1F2E;       /* Deep red - passion, desire, urgency */
+  --color-royal-purple: #5B3A7D;   /* Purple - royalty, creativity, luxury */
+  --color-midnight-blue: #1B2951;  /* Deep blue - trust, stability, heritage */
+
+  /* Neutral Sophistication */
+  --color-pearl: #FAFAF8;          /* Off-white - purity with warmth */
+  --color-platinum: #E8E6E1;       /* Light grey - modern sophistication */
+  --color-silver: #B8B5AD;         /* Mid grey - balance and neutrality */
+  --color-graphite: #6B6B6B;       /* Dark grey - professional, serious */
+
+  /* Functional Colors with Psychological Impact */
+  --color-success: #2E7D32;        /* Deep green - growth, prosperity */
+  --color-warning: #F57C00;        /* Amber - attention without alarm */
+  --color-error: #B71C1C;          /* Deep red - serious, important */
+
+  /* Dynamic Color Variables for Context */
+  --color-primary: var(--color-noir);
+  --color-secondary: var(--color-champagne);
+  --color-accent: var(--color-burgundy);
+  --color-background: var(--color-pearl);
+  --color-surface: #FFFFFF;
+  --color-text-primary: var(--color-charcoal);
+  --color-text-secondary: var(--color-graphite);
+  --color-text-inverse: var(--color-pearl);
+
+  /* Transparency for Layering */
+  --opacity-subtle: 0.05;
+  --opacity-light: 0.15;
+  --opacity-medium: 0.30;
+  --opacity-heavy: 0.60;
+  --opacity-dark: 0.85;
+}
+
+/* Dark Mode - Premium Night Experience */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--color-noir);
+    --color-surface: var(--color-obsidian);
+    --color-text-primary: var(--color-pearl);
+    --color-text-secondary: var(--color-platinum);
+  }
+}
+
+/* ==========================================================================
+   LUXURY TYPOGRAPHY SYSTEM
+   Research shows luxury brands use 2.3x more whitespace and larger type
+   ========================================================================== */
+
+:root {
+  /* Premium Font Stack */
+  --font-display: 'Didot', 'Bodoni MT', 'Noto Serif Display', 'Playfair Display', serif;
+  --font-heading: 'Futura', 'Avenir Next', 'Montserrat', sans-serif;
+  --font-body: 'Helvetica Neue', 'Arial Nova', -apple-system, sans-serif;
+  --font-accent: 'Courier New', 'IBM Plex Mono', monospace;
+
+  /* Golden Ratio Typography Scale (1.618) */
+  --type-scale-ratio: 1.618;
+  --type-base: clamp(16px, 1vw + 14px, 18px);
+
+  /* Fluid Typography Sizes */
+  --type-micro: calc(var(--type-base) / var(--type-scale-ratio));
+  --type-small: calc(var(--type-base) * 0.875);
+  --type-body: var(--type-base);
+  --type-lead: calc(var(--type-base) * 1.25);
+  --type-h6: calc(var(--type-base) * var(--type-scale-ratio));
+  --type-h5: calc(var(--type-h6) * 1.2);
+  --type-h4: calc(var(--type-h5) * 1.2);
+  --type-h3: calc(var(--type-h4) * 1.25);
+  --type-h2: calc(var(--type-h3) * 1.3);
+  --type-h1: calc(var(--type-h2) * 1.4);
+  --type-display: clamp(3rem, 8vw, 7rem);
+
+  /* Letter Spacing for Luxury Feel */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+  --letter-spacing-luxury: 0.2em;  /* For small caps and labels */
+
+  /* Line Heights for Readability */
+  --line-height-tight: 1.1;
+  --line-height-snug: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 1.75;
+}
+
+/* Typography Base Styles */
+body {
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: var(--line-height-relaxed);
+  font-weight: 300;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-text-primary);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Luxury Headings */
+h1, .h1 {
+  font-family: var(--font-display);
+  font-size: var(--type-h1);
+  font-weight: 300;
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: 2rem;
+}
+
+h2, .h2 {
+  font-family: var(--font-heading);
+  font-size: var(--type-h2);
+  font-weight: 400;
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-normal);
+  margin-bottom: 1.75rem;
+}
+
+h3, .h3 {
+  font-family: var(--font-heading);
+  font-size: var(--type-h3);
+  font-weight: 500;
+  line-height: var(--line-height-snug);
+  margin-bottom: 1.5rem;
+}
+
+/* Display Typography for Hero Sections */
+.display-heading {
+  font-family: var(--font-display);
+  font-size: var(--type-display);
+  font-weight: 200;
+  line-height: 0.9;
+  letter-spacing: var(--letter-spacing-tight);
+  text-transform: uppercase;
+}
+
+/* Luxury Small Caps for Premium Labels */
+.luxury-label {
+  font-family: var(--font-heading);
+  font-size: var(--type-small);
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-luxury);
+  text-transform: uppercase;
+  font-variant: small-caps;
+}
+
+/* ==========================================================================
+   SPACING SYSTEM - GOLDEN RATIO & WHITESPACE
+   Luxury brands use 60% more whitespace than standard e-commerce
+   ========================================================================== */
+
+:root {
+  /* Base Spacing Unit */
+  --space-unit: 1rem;
+
+  /* Golden Ratio Spacing Scale */
+  --space-xs: calc(var(--space-unit) * 0.382);    /* 6px */
+  --space-sm: calc(var(--space-unit) * 0.618);    /* 10px */
+  --space-md: var(--space-unit);                  /* 16px */
+  --space-lg: calc(var(--space-unit) * 1.618);    /* 26px */
+  --space-xl: calc(var(--space-unit) * 2.618);    /* 42px */
+  --space-2xl: calc(var(--space-unit) * 4.236);   /* 68px */
+  --space-3xl: calc(var(--space-unit) * 6.854);   /* 110px */
+  --space-4xl: calc(var(--space-unit) * 11.09);   /* 177px */
+
+  /* Layout Spacing */
+  --container-padding: clamp(var(--space-lg), 5vw, var(--space-3xl));
+  --section-padding: clamp(var(--space-3xl), 10vh, var(--space-4xl));
+  --card-padding: var(--space-xl);
+  --button-padding-x: var(--space-xl);
+  --button-padding-y: var(--space-lg);
+}
+
+/* ==========================================================================
+   ANIMATION SYSTEM - SOPHISTICATED MOTION
+   Studies show 0.3-0.4s is optimal for perceived quality
+   ========================================================================== */
+
+:root {
+  /* Timing Functions - Apple-inspired */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-luxury: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Duration Scale */
+  --duration-instant: 100ms;
+  --duration-fast: 200ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 800ms;
+  --duration-slowest: 1200ms;
+
+  /* Hover State Transitions */
+  --transition-all: all var(--duration-normal) var(--ease-luxury);
+  --transition-opacity: opacity var(--duration-normal) var(--ease-out-cubic);
+  --transition-transform: transform var(--duration-normal) var(--ease-out-expo);
+  --transition-color: color var(--duration-fast) var(--ease-luxury);
+}
+
+/* Smooth Transitions on Interactive Elements */
+a, button, input, select, textarea {
+  transition: var(--transition-all);
+}
+
+/* Sophisticated Hover States */
+@media (hover: hover) {
+  a:hover {
+    opacity: 0.7;
+  }
+
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .product-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* ==========================================================================
+   ADVANCED ANIMATIONS
+   ========================================================================== */
+
+/* Fade In Up - Classic Luxury Reveal */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scale Fade - Premium Product Reveal */
+@keyframes scaleFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Shimmer - Luxury Loading State */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Pulse - Attention without Intrusion */
+@keyframes luxuryPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* Text Reveal - Letter by Letter */
+@keyframes revealText {
+  from {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  }
+  to {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* Scroll-triggered Animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all var(--duration-slow) var(--ease-out-quint);
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered Animation for Lists */
+.stagger-animation > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp var(--duration-normal) var(--ease-out-cubic) forwards;
+}
+
+.stagger-animation > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-animation > *:nth-child(2) { animation-delay: 100ms; }
+.stagger-animation > *:nth-child(3) { animation-delay: 200ms; }
+.stagger-animation > *:nth-child(4) { animation-delay: 300ms; }
+.stagger-animation > *:nth-child(5) { animation-delay: 400ms; }
+
+/* ==========================================================================
+   LUXURY COMPONENTS
+   ========================================================================== */
+
+/* Premium Buttons with Psychological Triggers */
+.button-luxury {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--button-padding-y) var(--button-padding-x);
+  font-family: var(--font-heading);
+  font-size: var(--type-small);
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-luxury);
+  text-transform: uppercase;
+  color: var(--color-text-inverse);
+  background: linear-gradient(135deg, var(--color-noir) 0%, var(--color-obsidian) 100%);
+  border: 1px solid var(--color-champagne);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all var(--duration-normal) var(--ease-luxury);
+}
+
+.button-luxury::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--color-champagne), transparent);
+  transition: left var(--duration-slow) var(--ease-out-expo);
+}
+
+.button-luxury:hover::before {
+  left: 100%;
+}
+
+.button-luxury:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 30px rgba(212, 175, 55, 0.3),
+    0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Exclusive Badge - Scarcity Psychology */
+.badge-exclusive {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--type-micro);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-luxury);
+  text-transform: uppercase;
+  color: var(--color-champagne);
+  background: var(--color-noir);
+  border: 1px solid var(--color-champagne);
+  position: relative;
+  overflow: hidden;
+}
+
+.badge-exclusive::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent 30%, var(--color-champagne) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: shimmer 3s infinite;
+}
+
+/* Price Display - Psychological Pricing */
+.price-luxury {
+  font-family: var(--font-display);
+  font-size: var(--type-h3);
+  font-weight: 300;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-text-primary);
+}
+
+.price-luxury .currency {
+  font-size: 0.6em;
+  vertical-align: super;
+  opacity: 0.7;
+}
+
+.price-luxury .decimal {
+  font-size: 0.6em;
+  opacity: 0.7;
+}
+
+.price-original {
+  text-decoration: line-through;
+  opacity: 0.5;
+  font-size: 0.8em;
+}
+
+/* Product Card - Hero Product Presentation */
+.product-card-luxury {
+  position: relative;
+  background: var(--color-surface);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-luxury);
+}
+
+.product-card-luxury:hover {
+  transform: translateY(-10px);
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.12),
+    0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.product-card-luxury .product-image {
+  position: relative;
+  padding-bottom: 133.33%; /* 3:4 Aspect Ratio */
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.product-card-luxury .product-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slower) var(--ease-out-cubic);
+}
+
+.product-card-luxury:hover .product-image img {
+  transform: scale(1.1);
+}
+
+.product-card-luxury .product-info {
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+.product-card-luxury .product-brand {
+  font-family: var(--font-heading);
+  font-size: var(--type-micro);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-luxury);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.product-card-luxury .product-title {
+  font-family: var(--font-display);
+  font-size: var(--type-h5);
+  font-weight: 300;
+  line-height: var(--line-height-snug);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+}
+
+/* Trust Signals - Social Proof */
+.trust-signal {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--type-small);
+  color: var(--color-text-secondary);
+}
+
+.trust-signal .icon {
+  width: 20px;
+  height: 20px;
+  fill: var(--color-champagne);
+}
+
+/* Loading State - Premium Experience */
+.skeleton-loader {
+  background: linear-gradient(
+    90deg,
+    var(--color-platinum) 0%,
+    var(--color-silver) 50%,
+    var(--color-platinum) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer var(--duration-slowest) infinite;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   VISUAL HIERARCHY & LAYOUT
+   ========================================================================== */
+
+/* Container with Luxury Spacing */
+.container-luxury {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Wide Container for Full-width Sections */
+.container-wide {
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Section with Premium Spacing */
+.section-luxury {
+  padding: var(--section-padding) 0;
+  position: relative;
+}
+
+/* Grid System with Golden Ratio */
+.grid-luxury {
+  display: grid;
+  gap: var(--space-2xl);
+}
+
+.grid-luxury--2 {
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+}
+
+.grid-luxury--3 {
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+.grid-luxury--4 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Asymmetric Grid for Visual Interest */
+.grid-asymmetric {
+  display: grid;
+  grid-template-columns: 1.618fr 1fr; /* Golden ratio */
+  gap: var(--space-3xl);
+  align-items: center;
+}
+
+/* ==========================================================================
+   MICRO-INTERACTIONS & DETAILS
+   ========================================================================== */
+
+/* Custom Cursor for Premium Feel */
+.luxury-cursor {
+  cursor: none;
+}
+
+.cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--color-champagne);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transition: transform 0.1s ease;
+}
+
+.cursor-ring {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-champagne);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: all 0.15s ease;
+}
+
+/* Text Selection with Brand Colors */
+::selection {
+  background: var(--color-champagne);
+  color: var(--color-noir);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-champagne), var(--color-noir));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-champagne);
+}
+
+/* Focus States for Accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-champagne);
+  outline-offset: 4px;
+}
+
+/* ==========================================================================
+   RESPONSIVE LUXURY
+   ========================================================================== */
+
+/* Tablet Adjustments */
+@media (max-width: 1024px) {
+  :root {
+    --type-base: 16px;
+    --container-padding: var(--space-xl);
+    --section-padding: var(--space-3xl);
+  }
+
+  .grid-luxury--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-asymmetric {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+}
+
+/* Mobile Optimization */
+@media (max-width: 640px) {
+  :root {
+    --type-base: 15px;
+    --container-padding: var(--space-lg);
+    --section-padding: var(--space-2xl);
+  }
+
+  .grid-luxury--2,
+  .grid-luxury--3,
+  .grid-luxury--4 {
+    grid-template-columns: 1fr;
+  }
+
+  .display-heading {
+    font-size: clamp(2rem, 10vw, 4rem);
+  }
+
+  .button-luxury {
+    width: 100%;
+  }
+}
+
+/* Print Styles for Luxury */
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & PERFORMANCE
+   ========================================================================== */
+
+/* Reduced Motion for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-primary: #000000;
+    --color-secondary: #FFD700;
+    --color-text-primary: #000000;
+    --color-background: #FFFFFF;
+  }
+}
+
+/* Performance Optimizations */
+.will-animate {
+  will-change: transform, opacity;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Lazy Loading Placeholder */
+.lazy-load {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  min-height: 400px;
+}
+
+.lazy-load.loaded {
+  background: none;
+  min-height: auto;
+}

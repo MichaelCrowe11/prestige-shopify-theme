@@ -1,0 +1,145 @@
+<div class="product section">
+  <div class="container">
+    <div class="product__container">
+      <div class="product__media">
+        <div class="product__image-list">
+          {% for image in product.images %}
+            <div class="product__image">
+              <img src="{{ image | image_url: width: 800 }}"
+                   alt="{{ image.alt | escape }}"
+                   loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                   width="800"
+                   height="{{ 800 | divided_by: image.aspect_ratio }}">
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="product__info">
+        <h1 class="product__title">{{ product.title }}</h1>
+
+        {% if product.vendor %}
+          <p class="product__vendor">{{ product.vendor }}</p>
+        {% endif %}
+
+        <div class="product__price">
+          {% if product.compare_at_price > product.price %}
+            <span class="product__price--sale">{{ product.price | money }}</span>
+            <span class="product__price--compare">{{ product.compare_at_price | money }}</span>
+          {% else %}
+            <span>{{ product.price | money }}</span>
+          {% endif %}
+        </div>
+
+        <div class="product__description">
+          {{ product.description }}
+        </div>
+
+        <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" data-product-form>
+          {% unless product.has_only_default_variant %}
+            {% for option in product.options_with_values %}
+              <div class="product__option">
+                <label class="product__option-label">{{ option.name }}</label>
+                <div class="product__option-values">
+                  {% for value in option.values %}
+                    <label>
+                      <input type="radio"
+                             name="options[{{ option.name }}]"
+                             value="{{ value }}"
+                             {% if forloop.first %}checked{% endif %}>
+                      <span>{{ value }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+          {% endunless %}
+
+          <select name="id" class="product__variants" style="display: none;">
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}"
+                      data-price="{{ variant.price | money }}"
+                      data-compare-price="{{ variant.compare_at_price | money }}"
+                      {% unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }}
+              </option>
+            {% endfor %}
+          </select>
+
+          <div class="product__quantity">
+            <label class="product__quantity-label">{{ 'products.product.quantity' | t }}</label>
+            <div class="product__quantity-selector">
+              <button type="button" class="product__quantity-button" data-quantity-decrease>-</button>
+              <input type="number" name="quantity" value="1" min="1" class="product__quantity-input">
+              <button type="button" class="product__quantity-button" data-quantity-increase>+</button>
+            </div>
+          </div>
+
+          <button type="submit" name="add" class="button button--primary button--full product__add-to-cart"
+                  {% unless product.available %}disabled{% endunless %}>
+            {% if product.available %}
+              {{ 'products.product.add_to_cart' | t }}
+            {% else %}
+              {{ 'products.product.sold_out' | t }}
+            {% endif %}
+          </button>
+        </form>
+
+        <div class="product__meta">
+          {% if product.sku %}
+            <div class="product__meta-item">
+              <span class="product__meta-label">{{ 'products.general.sku' | t }}:</span>
+              <span>{{ product.sku }}</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main product",
+  "blocks": [
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1
+    },
+    {
+      "type": "variant_picker",
+      "name": "Variant picker",
+      "limit": 1
+    },
+    {
+      "type": "quantity_selector",
+      "name": "Quantity selector",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Enable image zoom",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

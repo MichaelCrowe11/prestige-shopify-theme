@@ -11,7 +11,11 @@
       "scroll": "Scroll"
     },
     "search": {
-      "title": "Search"
+      "title": "Search",
+      "placeholder": "Search our store",
+      "submit": "Search",
+      "no_results": "No results found for \"{{ terms }}\"",
+      "view_all": "View all results"
     },
     "meta": {
       "tags": "Tagged \"{{ tags }}\"",
@@ -28,12 +32,6 @@
       "email_placeholder": "Enter your email",
       "submit": "Subscribe",
       "success": "Thank you for subscribing!"
-    },
-    "search": {
-      "placeholder": "Search our store",
-      "submit": "Search",
-      "no_results": "No results found for \"{{ terms }}\"",
-      "view_all": "View all results"
     },
     "breadcrumbs": {
       "home": "Home"
@@ -89,8 +87,14 @@
       "share": "Share this product",
       "include_taxes": "Tax included.",
       "shipping_calculated": "Shipping calculated at checkout.",
-      "view_product": "View product",
-      "quick_shop": "Quick shop"
+      "view_product": "View {{ product }}",
+      "quick_shop": "Quick shop",
+      "quick_shop_label": "Quick shop for {{ product }}",
+      "add_to_wishlist": "Add {{ product }} to wishlist",
+      "on_sale_percentage": "Save {{ percentage }}%",
+      "new_arrival": "New arrival",
+      "on_sale_label": "On sale - Save {{ discount }}",
+      "sold_out_label": "This item is sold out"
     },
     "reviews": {
       "title": "Customer reviews",

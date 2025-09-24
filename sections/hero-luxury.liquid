@@ -1,0 +1,793 @@
+{% comment %}
+  Luxury Hero Section - Premium Design
+  Author: Michael Benjamin Crowe
+{% endcomment %}
+
+<section class="hero-luxury" data-section-id="{{ section.id }}" data-section-type="hero-luxury">
+  <div class="hero-luxury__container">
+    <!-- Background Media -->
+    <div class="hero-luxury__media" data-parallax="0.5">
+      {% if section.settings.video_url != blank %}
+        <video
+          class="hero-luxury__video"
+          autoplay
+          muted
+          loop
+          playsinline
+          poster="{{ section.settings.video_poster | image_url: width: 1920 }}"
+        >
+          <source src="{{ section.settings.video_url }}" type="video/mp4">
+        </video>
+      {% elsif section.settings.hero_image != blank %}
+        <div class="hero-luxury__image-wrapper">
+          {{ section.settings.hero_image | image_url: width: 1920 | image_tag:
+            class: 'hero-luxury__image',
+            loading: 'eager',
+            width: 1920,
+            height: 1080
+          }}
+        </div>
+      {% else %}
+        <div class="hero-luxury__gradient"></div>
+      {% endif %}
+
+      <!-- Overlay with gradient -->
+      <div class="hero-luxury__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}"></div>
+
+      <!-- Animated particles -->
+      {% if section.settings.show_particles %}
+        <div class="hero-luxury__particles">
+          {% for i in (1..20) %}
+            <div class="particle" style="--delay: {{ i | times: 0.2 }}s; --duration: {{ i | plus: 10 }}s;"></div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Content Layers -->
+    <div class="hero-luxury__content">
+      <div class="container-luxury">
+
+        <!-- Luxury Badge -->
+        {% if section.settings.luxury_badge != blank %}
+          <div class="hero-luxury__badge" data-reveal>
+            <span class="luxury-badge">
+              <span class="luxury-badge__icon">✦</span>
+              {{ section.settings.luxury_badge }}
+              <span class="luxury-badge__icon">✦</span>
+            </span>
+          </div>
+        {% endif %}
+
+        <!-- Main Heading with Typography Animation -->
+        {% if section.settings.heading != blank %}
+          <h1 class="hero-luxury__heading" data-reveal style="text-align: {{ section.settings.text_alignment }}">
+            {% assign words = section.settings.heading | split: ' ' %}
+            {% for word in words %}
+              <span class="word-reveal" style="animation-delay: {{ forloop.index0 | times: 0.1 }}s">{{ word }}</span>
+              {% unless forloop.last %} {% endunless %}
+            {% endfor %}
+          </h1>
+        {% endif %}
+
+        <!-- Subheading -->
+        {% if section.settings.subheading != blank %}
+          <div class="hero-luxury__subheading" data-reveal style="text-align: {{ section.settings.text_alignment }}">
+            {{ section.settings.subheading }}
+          </div>
+        {% endif %}
+
+        <!-- Description -->
+        {% if section.settings.description != blank %}
+          <div class="hero-luxury__description" data-reveal style="text-align: {{ section.settings.text_alignment }}">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+
+        <!-- CTA Buttons -->
+        {% if section.settings.button_primary_text != blank %}
+          <div class="hero-luxury__actions" data-reveal style="justify-content: {{ section.settings.text_alignment }}">
+            <a href="{{ section.settings.button_primary_link }}" class="button-luxury button-luxury--primary">
+              <span class="button-luxury__text">{{ section.settings.button_primary_text }}</span>
+              <span class="button-luxury__shimmer"></span>
+            </a>
+
+            {% if section.settings.button_secondary_text != blank %}
+              <a href="{{ section.settings.button_secondary_link }}" class="button-luxury button-luxury--secondary">
+                <span class="button-luxury__text">{{ section.settings.button_secondary_text }}</span>
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <!-- Trust Indicators -->
+        {% if section.settings.show_trust_indicators %}
+          <div class="hero-luxury__trust" data-reveal>
+            <div class="trust-indicators">
+              <div class="trust-indicator">
+                <span class="trust-icon">🏆</span>
+                <span class="trust-text">Award Winning</span>
+              </div>
+              <div class="trust-indicator">
+                <span class="trust-icon">✦</span>
+                <span class="trust-text">Premium Quality</span>
+              </div>
+              <div class="trust-indicator">
+                <span class="trust-icon">🚚</span>
+                <span class="trust-text">Free Shipping</span>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    {% if section.settings.show_scroll_indicator %}
+      <div class="hero-luxury__scroll" data-reveal>
+        <div class="scroll-indicator">
+          <span class="scroll-text">{{ 'general.accessibility.scroll' | t | default: 'Scroll to explore' }}</span>
+          <div class="scroll-arrow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Decorative Elements -->
+    <div class="hero-luxury__decorations">
+      <div class="decoration decoration--top-left"></div>
+      <div class="decoration decoration--top-right"></div>
+      <div class="decoration decoration--bottom-left"></div>
+      <div class="decoration decoration--bottom-right"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-luxury {
+    position: relative;
+    height: {{ section.settings.section_height }}vh;
+    min-height: 600px;
+    max-height: 1200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ section.settings.background_color }};
+  }
+
+  .hero-luxury__container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Background Media */
+  .hero-luxury__media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    z-index: 1;
+  }
+
+  .hero-luxury__video,
+  .hero-luxury__image,
+  .hero-luxury__gradient {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-luxury__gradient {
+    background: linear-gradient(135deg,
+      {{ section.settings.gradient_color_1 | default: '#1a1a1a' }} 0%,
+      {{ section.settings.gradient_color_2 | default: '#2d2d2d' }} 100%);
+  }
+
+  .hero-luxury__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      {{ section.settings.overlay_direction | default: '135deg' }},
+      {{ section.settings.overlay_color_1 | default: 'rgba(0,0,0,0.4)' }} 0%,
+      {{ section.settings.overlay_color_2 | default: 'rgba(0,0,0,0.2)' }} 100%
+    );
+    z-index: 2;
+  }
+
+  /* Animated Particles */
+  .hero-luxury__particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(212, 175, 55, 0.6);
+    border-radius: 50%;
+    animation: floatParticle var(--duration, 15s) linear infinite;
+    animation-delay: var(--delay, 0s);
+  }
+
+  @keyframes floatParticle {
+    0% {
+      transform: translateY(100vh) translateX(0) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100px) translateX(100px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .particle:nth-child(odd) {
+    left: calc(var(--i, 1) * 5%);
+  }
+
+  .particle:nth-child(even) {
+    right: calc(var(--i, 1) * 5%);
+  }
+
+  /* Content */
+  .hero-luxury__content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    color: {{ section.settings.text_color }};
+    text-align: center;
+  }
+
+  .hero-luxury__badge {
+    margin-bottom: 2rem;
+  }
+
+  .luxury-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 2rem;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    backdrop-filter: blur(10px);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border-radius: 50px;
+  }
+
+  .luxury-badge__icon {
+    color: #D4AF37;
+    animation: sparkle 2s ease-in-out infinite;
+  }
+
+  @keyframes sparkle {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.2) rotate(180deg); }
+  }
+
+  .hero-luxury__heading {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+
+  .word-reveal {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(100%);
+    animation: revealWord 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes revealWord {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-luxury__subheading {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+  }
+
+  .hero-luxury__description {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    opacity: 0.8;
+  }
+
+  /* Luxury Buttons */
+  .hero-luxury__actions {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .button-luxury {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 200px;
+  }
+
+  .button-luxury--primary {
+    background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+    color: #000;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+  }
+
+  .button-luxury--primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4);
+  }
+
+  .button-luxury--secondary {
+    background: transparent;
+    color: {{ section.settings.text_color }};
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+  }
+
+  .button-luxury--secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .button-luxury__shimmer {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s ease;
+  }
+
+  .button-luxury:hover .button-luxury__shimmer {
+    left: 100%;
+  }
+
+  /* Trust Indicators */
+  .hero-luxury__trust {
+    margin-bottom: 2rem;
+  }
+
+  .trust-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .trust-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .trust-icon {
+    font-size: 1.25rem;
+  }
+
+  /* Scroll Indicator */
+  .hero-luxury__scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  .scroll-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: {{ section.settings.text_color }};
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  .scroll-text {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .scroll-arrow {
+    opacity: 0.8;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+
+  /* Decorative Elements */
+  .hero-luxury__decorations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .decoration {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    opacity: 0.3;
+  }
+
+  .decoration--top-left {
+    top: -100px;
+    left: -100px;
+    animation: rotateDecoration 20s linear infinite;
+  }
+
+  .decoration--top-right {
+    top: -100px;
+    right: -100px;
+    animation: rotateDecoration 25s linear infinite reverse;
+  }
+
+  .decoration--bottom-left {
+    bottom: -100px;
+    left: -100px;
+    animation: rotateDecoration 30s linear infinite;
+  }
+
+  .decoration--bottom-right {
+    bottom: -100px;
+    right: -100px;
+    animation: rotateDecoration 35s linear infinite reverse;
+  }
+
+  @keyframes rotateDecoration {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Reveal Animations */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  [data-reveal].revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-luxury {
+      height: {{ section.settings.mobile_height }}vh;
+      min-height: 500px;
+    }
+
+    .hero-luxury__actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .button-luxury {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .trust-indicators {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .hero-luxury__particles {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .particle,
+    .luxury-badge__icon,
+    .scroll-indicator,
+    .decoration {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Reveal animations on scroll
+    const revealElements = document.querySelectorAll('[data-reveal]');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('revealed');
+          }, index * 200);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Smooth scroll for scroll indicator
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    if (scrollIndicator) {
+      scrollIndicator.addEventListener('click', () => {
+        window.scrollTo({
+          top: window.innerHeight,
+          behavior: 'smooth'
+        });
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Luxury Hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL (MP4)",
+      "info": "Upload video to Files section and use the URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster",
+      "label": "Video poster image"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "luxury_badge",
+      "label": "Luxury badge text",
+      "default": "Exclusive Collection"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Luxury Redefined"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Experience the pinnacle of elegance"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Discover our curated collection of premium products, crafted for those who appreciate the finest things in life.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_primary_text",
+      "label": "Primary button text",
+      "default": "Explore Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "button_secondary_text",
+      "label": "Secondary button text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Section height",
+      "min": 60,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 70
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_1",
+      "label": "Gradient color 1",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_2",
+      "label": "Gradient color 2",
+      "default": "#2d2d2d"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color_1",
+      "label": "Overlay color 1",
+      "default": "rgba(0,0,0,0.4)"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color_2",
+      "label": "Overlay color 2",
+      "default": "rgba(0,0,0,0.2)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Effects"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_particles",
+      "label": "Show animated particles",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_indicator",
+      "label": "Show scroll indicator",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_indicators",
+      "label": "Show trust indicators",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxury Hero"
+    }
+  ]
+}
+{% endschema %}

@@ -8,14 +8,17 @@
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
   <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+  <link rel="dns-prefetch" href="https://productreviews.shopifycdn.com">
+  <link rel="dns-prefetch" href="https://ajax.googleapis.com">
 
   {%- if settings.favicon != blank -%}
     <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
+    <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180 }}">
   {%- endif -%}
 
   <title>
     {{ page_title }}
-    {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif -%}
+    {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags }}{% endif -%}
     {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
     {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
   </title>
@@ -25,9 +28,13 @@
   {% endif %}
 
   {% render 'meta-tags' %}
+  {% render 'social-meta-tags' %}
+  {% render 'structured-data' %}
+  {% render 'analytics-integration' %}
 
   <script src="{{ 'global.js' | asset_url }}" defer></script>
   <script src="{{ 'prestige.js' | asset_url }}" defer></script>
+  <script src="{{ 'prestige-compliant.js' | asset_url }}" defer></script>
 
   {{ content_for_header }}
 
@@ -76,8 +83,14 @@
     {{ heading_font | font_face: font_display: 'swap' }}
   </style>
 
+  <link rel="preload" href="{{ 'base.css' | asset_url }}" as="style">
+  <link rel="preload" href="{{ 'prestige.css' | asset_url }}" as="style">
+  <link rel="preload" href="{{ 'prestige-luxury.css' | asset_url }}" as="style">
+
   {{ 'base.css' | asset_url | stylesheet_tag }}
   {{ 'prestige.css' | asset_url | stylesheet_tag }}
+  <link rel="stylesheet" href="{{ 'prestige-luxury.css' | asset_url }}" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{{ 'prestige-luxury.css' | asset_url }}"></noscript>
 
   <script>
     document.documentElement.className = document.documentElement.className.replace('no-js', 'js');

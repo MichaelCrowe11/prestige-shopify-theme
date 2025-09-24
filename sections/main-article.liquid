@@ -1,0 +1,225 @@
+<article class="section">
+  <div class="container">
+    <div class="article-content">
+      <header class="article-header">
+        <div class="article-meta">
+          <time>{{ article.published_at | date: "%B %d, %Y" }}</time>
+          {% if article.author %}
+            <span>By {{ article.author }}</span>
+          {% endif %}
+        </div>
+
+        <h1 class="article-title">{{ article.title }}</h1>
+
+        {% if article.excerpt %}
+          <div class="article-excerpt">
+            {{ article.excerpt }}
+          </div>
+        {% endif %}
+
+        {% if article.tags.size > 0 %}
+          <div class="article-tags">
+            {% for tag in article.tags %}
+              <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="tag">{{ tag }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </header>
+
+      {% if article.image %}
+        <div class="article-image">
+          <img src="{{ article.image | image_url: width: 1200 }}"
+               alt="{{ article.image.alt | escape }}"
+               loading="eager"
+               width="1200"
+               height="{{ 1200 | divided_by: article.image.aspect_ratio }}">
+        </div>
+      {% endif %}
+
+      <div class="article-body rte">
+        {{ article.content }}
+      </div>
+
+      <footer class="article-footer">
+        <div class="article-share">
+          <h3>Share this article</h3>
+          <div class="share-buttons">
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url }}{{ article.url }}" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://twitter.com/intent/tweet?url={{ shop.url }}{{ article.url }}&text={{ article.title | url_encode }}" target="_blank" rel="noopener">Twitter</a>
+            <a href="https://pinterest.com/pin/create/button/?url={{ shop.url }}{{ article.url }}&description={{ article.title | url_encode }}" target="_blank" rel="noopener">Pinterest</a>
+          </div>
+        </div>
+
+        <nav class="article-nav">
+          {% if blog.previous_article %}
+            <a href="{{ blog.previous_article.url }}" class="article-nav__prev">
+              ← {{ blog.previous_article.title }}
+            </a>
+          {% endif %}
+          {% if blog.next_article %}
+            <a href="{{ blog.next_article.url }}" class="article-nav__next">
+              {{ blog.next_article.title }} →
+            </a>
+          {% endif %}
+        </nav>
+      </footer>
+
+      {% if blog.comments_enabled? %}
+        <section class="article-comments">
+          <h3>Comments</h3>
+
+          {% paginate article.comments by 10 %}
+            {% for comment in article.comments %}
+              <div class="comment">
+                <div class="comment-author">
+                  <strong>{{ comment.author }}</strong>
+                  <time>{{ comment.created_at | date: "%B %d, %Y at %I:%M %p" }}</time>
+                </div>
+                <div class="comment-content">
+                  {{ comment.content }}
+                </div>
+              </div>
+            {% endfor %}
+
+            {% if paginate.pages > 1 %}
+              {{ paginate | default_pagination }}
+            {% endif %}
+          {% endpaginate %}
+
+          {% form 'new_comment', article %}
+            <h4>Leave a comment</h4>
+
+            {{ form.errors | default_errors }}
+
+            <div class="form__field">
+              <label for="comment-author">Name</label>
+              <input type="text" name="comment[author]" id="comment-author" required>
+            </div>
+
+            <div class="form__field">
+              <label for="comment-email">Email</label>
+              <input type="email" name="comment[email]" id="comment-email" required>
+            </div>
+
+            <div class="form__field">
+              <label for="comment-body">Comment</label>
+              <textarea name="comment[body]" id="comment-body" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="button button--primary">Post Comment</button>
+          {% endform %}
+        </section>
+      {% endif %}
+    </div>
+  </div>
+</article>
+
+<style>
+  .article-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .article-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .article-meta {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin-bottom: 1rem;
+  }
+
+  .article-title {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .article-excerpt {
+    font-size: 1.25rem;
+    color: var(--color-text-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .article-tags {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    padding: 0.25rem 0.75rem;
+    background: var(--color-background-secondary);
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .article-image {
+    margin-bottom: 3rem;
+  }
+
+  .article-image img {
+    width: 100%;
+    height: auto;
+  }
+
+  .article-body {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .article-footer {
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .article-share {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .share-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .share-buttons a {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+  }
+
+  .article-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+
+  .article-comments {
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .comment {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .comment-author {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin-bottom: 0.5rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Article"
+}
+{% endschema %}

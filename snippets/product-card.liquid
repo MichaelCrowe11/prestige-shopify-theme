@@ -11,19 +11,37 @@
   - show_color_swatches: Boolean
 {% endcomment %}
 
-<div class="card product-card" data-product-card data-product-id="{{ product.id }}">
+<article class="card product-card" data-product-card data-product-id="{{ product.id }}" role="article" aria-label="{{ product.title | escape }}">
   <div class="card__image">
-    <a href="{{ product.url }}">
+    <a href="{{ product.url }}" aria-label="{{ 'products.product.view_product' | t: product: product.title | escape }}">
       {% if product.featured_image %}
-        <img src="{{ product.featured_image | image_url: width: 600 }}"
-             alt="{{ product.featured_image.alt | escape }}"
+        {%- liquid
+          assign img_width = 600
+          assign img_width_2x = img_width | times: 2
+          assign img_width_3x = img_width | times: 3
+          assign img_height = img_width | divided_by: product.featured_image.aspect_ratio | round
+        -%}
+        <img src="{{ product.featured_image | image_url: width: img_width }}"
+             srcset="{{ product.featured_image | image_url: width: img_width }} 1x,
+                     {{ product.featured_image | image_url: width: img_width_2x }} 2x,
+                     {{ product.featured_image | image_url: width: img_width_3x }} 3x"
+             alt="{{ product.featured_image.alt | default: product.title | escape }}"
+             width="{{ img_width }}"
+             height="{{ img_height }}"
              loading="lazy"
              class="product-card__image product-card__image--primary">
 
         {% if show_second_image and product.images[1] %}
-          <img src="{{ product.images[1] | image_url: width: 600 }}"
-               alt="{{ product.images[1].alt | escape }}"
+          {%- assign img2_height = img_width | divided_by: product.images[1].aspect_ratio | round -%}
+          <img src="{{ product.images[1] | image_url: width: img_width }}"
+               srcset="{{ product.images[1] | image_url: width: img_width }} 1x,
+                       {{ product.images[1] | image_url: width: img_width_2x }} 2x,
+                       {{ product.images[1] | image_url: width: img_width_3x }} 3x"
+               alt="{{ product.images[1].alt | default: product.title | escape }}"
+               width="{{ img_width }}"
+               height="{{ img2_height }}"
                loading="lazy"
+               aria-hidden="true"
                class="product-card__image product-card__image--secondary">
         {% endif %}
       {% else %}
@@ -32,16 +50,16 @@
     </a>
 
     {% if product.compare_at_price > product.price %}
-      <span class="badge badge--sale">
-        {% assign sale_percentage = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+      {% assign sale_percentage = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+      <span class="badge badge--sale" aria-label="{{ 'products.product.on_sale_percentage' | t: percentage: sale_percentage }}">
         -{{ sale_percentage }}%
       </span>
     {% elsif product.created_at > 30 | days | ago %}
-      <span class="badge badge--new">New</span>
+      <span class="badge badge--new" aria-label="{{ 'products.product.new_arrival' | t }}">{{ 'products.product.new' | t }}</span>
     {% endif %}
 
     {% unless product.available %}
-      <span class="badge badge--soldout">Sold Out</span>
+      <span class="badge badge--soldout" aria-label="{{ 'products.product.sold_out' | t }}">{{ 'products.product.sold_out' | t }}</span>
     {% endunless %}
 
     {% if show_quick_add %}
@@ -49,8 +67,9 @@
         <button class="product-card__quick-add button button--secondary button--small"
                 data-quick-shop
                 data-product-handle="{{ product.handle }}"
-                {% unless product.available %}disabled{% endunless %}>
-          {{ 'products.product.quick_shop' | t }}
+                aria-label="{{ 'products.product.quick_shop_label' | t: product: product.title | escape }}"
+                {% unless product.available %}disabled aria-disabled="true"{% endunless %}>
+          <span aria-hidden="true">{{ 'products.product.quick_shop' | t }}</span>
         </button>
 
         <button class="product-card__wishlist"
@@ -60,7 +79,7 @@
                 data-product-image="{{ product.featured_image | image_url: width: 300 }}"
                 data-product-price="{{ product.price | money }}"
                 data-product-url="{{ product.url }}"
-                aria-label="Add to wishlist">
+                aria-label="{{ 'products.product.add_to_wishlist' | t: product: product.title | escape }}" aria-pressed="false">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M17.367 3.842a4.583 4.583 0 00-6.484 0L10 4.725l-.883-.883a4.584 4.584 0 00-6.484 6.484l.884.883L10 17.692l6.483-6.483.884-.883a4.584 4.584 0 000-6.484z"/>
           </svg>
@@ -75,7 +94,7 @@
     {% endif %}
 
     <h3 class="card__title">
-      <a href="{{ product.url }}">{{ product.title }}</a>
+      <a href="{{ product.url }}" tabindex="-1">{{ product.title }}</a>
     </h3>
 
     {% if show_rating %}
@@ -120,7 +139,7 @@
       {% endif %}
     {% endif %}
   </div>
-</div>
+</article>
 
 <style>
   .product-card {

@@ -1,0 +1,113 @@
+{
+  "current": {
+    "color_primary": "#000000",
+    "color_secondary": "#D4AF37",
+    "color_accent": "#8B7355",
+    "color_background": "#FFFFFF",
+    "color_background_secondary": "#F8F6F3",
+    "color_text": "#1C1C1C",
+    "color_text_light": "#666666",
+    "type_header_font": "playfair_display_n4",
+    "type_header_base_size": 36,
+    "type_body_font": "assistant_n4",
+    "type_body_base_size": 16,
+    "page_width": "1400",
+    "spacing_grid": 24,
+    "spacing_sections": 80,
+    "header_layout": "logo-center",
+    "sticky_header": true,
+    "transparent_header": true,
+    "logo": "",
+    "logo_width": 180,
+    "footer_layout": "4-columns",
+    "show_newsletter": true,
+    "show_social_icons": true,
+    "product_card_layout": "minimal",
+    "show_quick_add": true,
+    "show_second_image": true,
+    "show_vendor": false,
+    "show_rating": false,
+    "show_color_swatches": true,
+    "cart_type": "drawer",
+    "show_cart_note": true,
+    "show_free_shipping_bar": true,
+    "free_shipping_threshold": 100,
+    "social_facebook": "https://facebook.com/shopify",
+    "social_instagram": "https://instagram.com/shopify",
+    "social_twitter": "https://twitter.com/shopify",
+    "favicon": "",
+    "show_announcement_bar": true,
+    "announcement_text": "Free shipping on orders over $100",
+    "announcement_bg_color": "#000000",
+    "announcement_text_color": "#ffffff",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu",
+          "show_announcement_bar": true,
+          "announcement_text": "Complimentary shipping on orders over $100",
+          "announcement_bg_color": "#000000",
+          "announcement_text_color": "#D4AF37"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "footer-0": {
+            "type": "link_list",
+            "settings": {
+              "title": "Shop",
+              "menu": "footer"
+            }
+          },
+          "footer-1": {
+            "type": "link_list",
+            "settings": {
+              "title": "Support",
+              "menu": "footer"
+            }
+          },
+          "footer-2": {
+            "type": "text",
+            "settings": {
+              "title": "About",
+              "text": "<p>Prestige represents the pinnacle of luxury e-commerce, offering an unparalleled shopping experience for discerning customers.</p>"
+            }
+          },
+          "footer-3": {
+            "type": "contact",
+            "settings": {
+              "title": "Contact",
+              "email": "contact@prestige.com",
+              "phone": "1-800-PRESTIGE"
+            }
+          }
+        },
+        "block_order": ["footer-0", "footer-1", "footer-2", "footer-3"],
+        "settings": {}
+      }
+    },
+    "content_for_index": []
+  },
+  "presets": {
+    "Luxury": {
+      "color_primary": "#000000",
+      "color_secondary": "#D4AF37",
+      "type_header_font": "playfair_display_n4",
+      "type_body_font": "assistant_n4"
+    },
+    "Modern": {
+      "color_primary": "#1B2951",
+      "color_secondary": "#C9A961",
+      "type_header_font": "futura_n4",
+      "type_body_font": "helvetica_n4"
+    },
+    "Classic": {
+      "color_primary": "#2C2C2C",
+      "color_secondary": "#8B7355",
+      "type_header_font": "bodoni_n4",
+      "type_body_font": "georgia_n4"
+    }
+  }
+}

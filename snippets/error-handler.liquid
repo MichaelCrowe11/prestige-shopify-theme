@@ -1,0 +1,167 @@
+{% comment %}
+  Error Handler Snippet
+  Provides graceful error messages and fallbacks
+
+  Usage:
+  {% render 'error-handler', type: 'product-not-found' %}
+{% endcomment %}
+
+{%- liquid
+  assign error_type = type | default: 'general'
+  assign show_contact = show_contact | default: true
+  assign show_home_link = show_home_link | default: true
+-%}
+
+<div class="error-handler error-handler--{{ error_type }}" role="alert" aria-live="polite">
+  <div class="error-handler__icon">
+    {%- case error_type -%}
+      {%- when 'product-not-found' -%}
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9.172 8.172L12 5.343l2.828 2.829L20.485 2.515l1.414 1.414L16.243 9.586 19.071 12.414 12 19.485 4.929 12.414l2.828-2.828z"/>
+          <circle cx="12" cy="12" r="10"/>
+        </svg>
+      {%- when 'cart-error' -%}
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 3h18l-1 9H4L3 3zM4 12h16l-2 9H6l-2-9z"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+        </svg>
+      {%- when 'network-error' -%}
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M1 9l11-7 11 7v11H13V14h-2v7H1V9z"/>
+          <polyline points="23,9 12,2 1,9"/>
+        </svg>
+      {%- when 'payment-error' -%}
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <line x1="2" y1="10" x2="22" y2="10"/>
+        </svg>
+      {%- else -%}
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+    {%- endcase -%}
+  </div>
+
+  <div class="error-handler__content">
+    <h2 class="error-handler__title">
+      {%- case error_type -%}
+        {%- when 'product-not-found' -%}
+          {{ 'errors.product_not_found.title' | t | default: 'Product Not Found' }}
+        {%- when 'cart-error' -%}
+          {{ 'errors.cart_error.title' | t | default: 'Cart Update Failed' }}
+        {%- when 'network-error' -%}
+          {{ 'errors.network_error.title' | t | default: 'Connection Error' }}
+        {%- when 'payment-error' -%}
+          {{ 'errors.payment_error.title' | t | default: 'Payment Processing Error' }}
+        {%- when 'stock-error' -%}
+          {{ 'errors.stock_error.title' | t | default: 'Out of Stock' }}
+        {%- when 'form-error' -%}
+          {{ 'errors.form_error.title' | t | default: 'Form Submission Error' }}
+        {%- else -%}
+          {{ 'errors.general.title' | t | default: 'Something Went Wrong' }}
+      {%- endcase -%}
+    </h2>
+
+    <p class="error-handler__message">
+      {%- case error_type -%}
+        {%- when 'product-not-found' -%}
+          {{ 'errors.product_not_found.message' | t | default: "We couldn't find the product you're looking for. It may have been removed or the link might be incorrect." }}
+        {%- when 'cart-error' -%}
+          {{ 'errors.cart_error.message' | t | default: "We couldn't update your cart. Please try again or contact support if the issue persists." }}
+        {%- when 'network-error' -%}
+          {{ 'errors.network_error.message' | t | default: "Please check your internet connection and try again." }}
+        {%- when 'payment-error' -%}
+          {{ 'errors.payment_error.message' | t | default: "There was an issue processing your payment. Please verify your payment details and try again." }}
+        {%- when 'stock-error' -%}
+          {{ 'errors.stock_error.message' | t | default: "This item is currently out of stock. Please check back later or contact us for availability." }}
+        {%- when 'form-error' -%}
+          {{ 'errors.form_error.message' | t | default: "There was an error submitting the form. Please check your information and try again." }}
+        {%- else -%}
+          {{ message | default: 'errors.general.message' | t | default: "An unexpected error occurred. Please try again or contact support if the issue persists." }}
+      {%- endcase -%}
+    </p>
+
+    {%- if custom_message != blank -%}
+      <p class="error-handler__custom-message">{{ custom_message }}</p>
+    {%- endif -%}
+
+    <div class="error-handler__actions">
+      {%- if show_home_link -%}
+        <a href="{{ routes.root_url }}" class="button button--primary">
+          {{ 'errors.actions.go_home' | t | default: 'Return to Homepage' }}
+        </a>
+      {%- endif -%}
+
+      {%- if show_contact -%}
+        <a href="{{ routes.contact_url | default: '/pages/contact' }}" class="button button--secondary">
+          {{ 'errors.actions.contact_support' | t | default: 'Contact Support' }}
+        </a>
+      {%- endif -%}
+
+      {%- if retry_action != blank -%}
+        <button class="button button--primary" onclick="{{ retry_action }}">
+          {{ 'errors.actions.try_again' | t | default: 'Try Again' }}
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .error-handler {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .error-handler__icon {
+    margin-bottom: 2rem;
+    color: var(--color-error, #B71C1C);
+    opacity: 0.8;
+  }
+
+  .error-handler__icon svg {
+    width: 64px;
+    height: 64px;
+  }
+
+  .error-handler__title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-primary);
+  }
+
+  .error-handler__message {
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .error-handler__custom-message {
+    background-color: var(--color-background-secondary);
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+    font-size: 0.875rem;
+  }
+
+  .error-handler__actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 480px) {
+    .error-handler__actions {
+      flex-direction: column;
+    }
+
+    .error-handler__actions .button {
+      width: 100%;
+    }
+  }
+</style>

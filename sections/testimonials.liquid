@@ -1,0 +1,230 @@
+{% comment %}
+  Testimonials Section
+  Author: Michael Benjamin Crowe
+{% endcomment %}
+
+<section class="section section--testimonials">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <div class="section-header text-center">
+        <h2 class="section-title">{{ section.settings.heading }}</h2>
+        {% if section.settings.subheading != blank %}
+          <p class="section-subtitle">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="testimonials-grid">
+      {% for block in section.blocks %}
+        <div class="testimonial-card" {{ block.shopify_attributes }}>
+          <div class="testimonial-card__content">
+            <div class="testimonial-card__quote">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
+              </svg>
+            </div>
+            <blockquote class="testimonial-card__text">
+              {{ block.settings.quote }}
+            </blockquote>
+            <div class="testimonial-card__author">
+              {% if block.settings.customer_avatar != blank %}
+                <img src="{{ block.settings.customer_avatar | image_url: width: 60 }}"
+                     alt="{{ block.settings.customer_name }}"
+                     width="60"
+                     height="60"
+                     class="testimonial-card__avatar">
+              {% endif %}
+              <div>
+                <cite class="testimonial-card__name">{{ block.settings.customer_name }}</cite>
+                {% if block.settings.customer_title != blank %}
+                  <p class="testimonial-card__title">{{ block.settings.customer_title }}</p>
+                {% endif %}
+              </div>
+            </div>
+            {% if block.settings.rating > 0 %}
+              <div class="testimonial-card__rating">
+                {% for i in (1..5) %}
+                  <span class="star {% if i <= block.settings.rating %}star--filled{% endif %}">★</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section--testimonials {
+    padding: 4rem 0;
+    background-color: var(--color-background-secondary);
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .testimonial-card {
+    background: var(--color-background);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform var(--animation-duration) var(--animation-timing);
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .testimonial-card__quote {
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+  }
+
+  .testimonial-card__text {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .testimonial-card__author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .testimonial-card__avatar {
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .testimonial-card__name {
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  .testimonial-card__title {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin-top: 0.25rem;
+  }
+
+  .testimonial-card__rating {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .star {
+    color: #ddd;
+    font-size: 1.25rem;
+  }
+
+  .star--filled {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 768px) {
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "This product exceeded my expectations. The quality is outstanding and the customer service was exceptional."
+        },
+        {
+          "type": "text",
+          "id": "customer_name",
+          "label": "Customer name",
+          "default": "Sarah Johnson"
+        },
+        {
+          "type": "text",
+          "id": "customer_title",
+          "label": "Customer title",
+          "info": "Optional title or location"
+        },
+        {
+          "type": "image_picker",
+          "id": "customer_avatar",
+          "label": "Customer photo"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "label": "Star rating",
+          "default": 5
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Absolutely love this store! The quality is unmatched and shipping was incredibly fast.",
+            "customer_name": "Emily Chen",
+            "customer_title": "Verified Customer",
+            "rating": 5
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Best purchase I've made this year. Highly recommend to anyone looking for premium quality.",
+            "customer_name": "Michael Rodriguez",
+            "customer_title": "New York, NY",
+            "rating": 5
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Exceptional customer service and beautiful products. Will definitely be shopping here again!",
+            "customer_name": "Sarah Thompson",
+            "customer_title": "Repeat Customer",
+            "rating": 5
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

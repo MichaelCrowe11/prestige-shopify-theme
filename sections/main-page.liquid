@@ -1,0 +1,56 @@
+<div class="section">
+  <div class="container">
+    <div class="page-content">
+      <h1>{{ page.title }}</h1>
+      <div class="rte">
+        {{ page.content }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .page-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+
+  .page-content h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .rte {
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+
+  .rte h2, .rte h3, .rte h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .rte p {
+    margin-bottom: 1rem;
+  }
+
+  .rte ul, .rte ol {
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .rte img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 2rem auto;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Main page",
+  "settings": []
+}
+{% endschema %}

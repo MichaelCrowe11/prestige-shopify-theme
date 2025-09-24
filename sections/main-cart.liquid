@@ -1,0 +1,155 @@
+<div class="section">
+  <div class="container">
+    <h1>{{ 'cart.general.title' | t }}</h1>
+
+    {% if cart.item_count > 0 %}
+      <form action="{{ routes.cart_url }}" method="post">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>{{ 'cart.items.product' | t }}</th>
+              <th>{{ 'cart.items.price' | t }}</th>
+              <th>{{ 'cart.items.quantity' | t }}</th>
+              <th>{{ 'cart.items.total' | t }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart.items %}
+              <tr>
+                <td class="cart-table__product">
+                  <div class="cart-item">
+                    <a href="{{ item.url }}">
+                      <img src="{{ item.image | image_url: width: 100 }}" alt="{{ item.title }}" width="100" height="100">
+                    </a>
+                    <div>
+                      <a href="{{ item.url }}">{{ item.product.title }}</a>
+                      {% unless item.variant.title == 'Default Title' %}
+                        <p>{{ item.variant.title }}</p>
+                      {% endunless %}
+                      <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0">
+                        {{ 'cart.general.remove' | t }}
+                      </a>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ item.price | money }}</td>
+                <td>
+                  <input type="number" name="updates[]" value="{{ item.quantity }}" min="1">
+                </td>
+                <td>{{ item.line_price | money }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="cart-footer">
+          <div class="cart-subtotal">
+            <span>{{ 'cart.general.subtotal' | t }}</span>
+            <span>{{ cart.total_price | money }}</span>
+          </div>
+
+          <div class="cart-actions">
+            <button type="submit" name="update" class="button button--secondary">
+              {{ 'cart.general.update' | t }}
+            </button>
+            <button type="submit" name="checkout" class="button button--primary">
+              {{ 'cart.general.checkout' | t }}
+            </button>
+          </div>
+        </div>
+      </form>
+    {% else %}
+      <p class="cart-empty">{{ 'cart.general.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+        {{ 'cart.general.continue_shopping' | t }}
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+  }
+
+  .cart-table th {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .cart-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .cart-item {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .cart-item img {
+    flex-shrink: 0;
+  }
+
+  .cart-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+  }
+
+  .cart-subtotal {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .cart-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .cart-empty {
+    text-align: center;
+    padding: 4rem 0;
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .cart-table {
+      display: block;
+    }
+
+    .cart-table thead {
+      display: none;
+    }
+
+    .cart-table tr {
+      display: block;
+      margin-bottom: 2rem;
+      border: 1px solid var(--color-border);
+      padding: 1rem;
+    }
+
+    .cart-table td {
+      display: block;
+      text-align: right;
+      padding: 0.5rem 0;
+      border: none;
+    }
+
+    .cart-table td:before {
+      content: attr(data-label);
+      float: left;
+      font-weight: 600;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Main cart"
+}
+{% endschema %}

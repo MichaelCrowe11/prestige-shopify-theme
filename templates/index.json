@@ -1,18 +1,27 @@
 {
   "sections": {
     "hero": {
-      "type": "hero-video",
+      "type": "hero-luxury",
       "settings": {
+        "luxury_badge": "Exclusive Collection",
         "heading": "Luxury Redefined",
-        "subheading": "Welcome to Prestige",
-        "text": "<p>Experience the epitome of elegance with our curated collection of premium products</p>",
-        "button_label": "Shop Collection",
-        "button_link": "/collections/all",
-        "height": 90,
+        "subheading": "Experience the Pinnacle of Elegance",
+        "description": "<p>Discover our curated collection of premium products, meticulously crafted for those who appreciate the finest things in life.</p>",
+        "button_primary_text": "Explore Collection",
+        "button_primary_link": "/collections/all",
+        "button_secondary_text": "Our Story",
+        "button_secondary_link": "/pages/about",
+        "section_height": 95,
+        "mobile_height": 75,
         "text_alignment": "center",
+        "background_color": "#0a0a0a",
         "text_color": "#ffffff",
-        "overlay_color": "#000000",
-        "overlay_opacity": 30
+        "gradient_color_1": "#1a1a1a",
+        "gradient_color_2": "#2d2d2d",
+        "overlay_opacity": 40,
+        "show_particles": true,
+        "show_scroll_indicator": true,
+        "show_trust_indicators": true
       }
     },
     "featured_products": {

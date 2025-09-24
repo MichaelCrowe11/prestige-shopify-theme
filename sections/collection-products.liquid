@@ -1,0 +1,129 @@
+<div class="section">
+  <div class="container">
+    <div class="collection-products">
+      {% if collection.products_count > 0 %}
+        <div class="collection-filters">
+          <div class="collection-filters__count">
+            {{ 'collections.general.items' | t: count: collection.products_count }}
+          </div>
+          <div class="collection-filters__sort">
+            <label for="sort-by">{{ 'collections.sorting.title' | t }}</label>
+            <select id="sort-by" name="sort_by">
+              {% for option in collection.sort_options %}
+                <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>
+                  {{ option.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="products-grid grid grid--{{ section.settings.products_per_row }}-col">
+          {% paginate collection.products by section.settings.products_per_page %}
+            {% for product in collection.products %}
+              {% render 'product-card', product: product %}
+            {% endfor %}
+
+            {% if paginate.pages > 1 %}
+              <div class="pagination">
+                {{ paginate | default_pagination }}
+              </div>
+            {% endif %}
+          {% endpaginate %}
+        </div>
+      {% else %}
+        <p class="collection-empty">{{ 'collections.general.no_products' | t }}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .collection-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .collection-filters__sort select {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-background);
+    cursor: pointer;
+  }
+
+  .collection-empty {
+    text-align: center;
+    padding: 4rem 0;
+    font-size: 1.25rem;
+    color: var(--color-text-light);
+  }
+
+  .pagination {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .pagination a,
+  .pagination span {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .pagination .current {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+    border-color: var(--color-primary);
+  }
+
+  .pagination a:hover {
+    background-color: var(--color-background-secondary);
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sortSelect = document.getElementById('sort-by');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', function() {
+        const url = new URL(window.location);
+        url.searchParams.set('sort_by', this.value);
+        window.location = url.toString();
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Collection products",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 12,
+      "max": 48,
+      "step": 12,
+      "default": 24
+    }
+  ]
+}
+{% endschema %}

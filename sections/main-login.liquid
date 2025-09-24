@@ -1,0 +1,59 @@
+<div class="section">
+  <div class="container">
+    <div class="account-form">
+      <h1>{{ 'customer.login.title' | t }}</h1>
+
+      {% form 'customer_login' %}
+        {% if form.errors %}
+          <div class="form-errors">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <div class="form__field">
+          <label for="email">{{ 'customer.login.email' | t }}</label>
+          <input type="email" name="customer[email]" id="email" required>
+        </div>
+
+        <div class="form__field">
+          <label for="password">{{ 'customer.login.password' | t }}</label>
+          <input type="password" name="customer[password]" id="password" required>
+        </div>
+
+        <button type="submit" class="button button--primary button--full">
+          {{ 'customer.login.sign_in' | t }}
+        </button>
+
+        <p>
+          <a href="{{ routes.account_recovery_url }}">{{ 'customer.login.forgot_password' | t }}</a>
+        </p>
+
+        <p>
+          {{ 'customer.login.new_customer' | t }}
+          <a href="{{ routes.account_register_url }}">{{ 'customer.login.create_account' | t }}</a>
+        </p>
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .account-form {
+    max-width: 400px;
+    margin: 4rem auto;
+  }
+
+  .form-errors {
+    background-color: #fee;
+    border: 1px solid #fcc;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: #c00;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Login"
+}
+{% endschema %}

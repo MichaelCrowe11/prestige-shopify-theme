@@ -1,0 +1,47 @@
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment variables
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Shopify
+.shopify/
+.theme-check.yml
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Build files
+dist/
+build/
+
+# Keep theme packages but ignore working archives
+*.zip
+*.tar.gz
+!Prestige-Theme-v1.0.0-FINAL-100.tar.gz
+
+# Keep important documentation
+!README.md
+!FINAL_THEME_COMPLETE.md

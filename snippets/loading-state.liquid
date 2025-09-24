@@ -1,0 +1,350 @@
+{% comment %}
+  Loading State Snippet
+  Provides consistent loading indicators
+
+  Usage:
+  {% render 'loading-state', type: 'spinner', size: 'medium' %}
+{% endcomment %}
+
+{%- liquid
+  assign loading_type = type | default: 'spinner'
+  assign loading_size = size | default: 'medium'
+  assign loading_text = text | default: 'Loading...'
+  assign show_text = show_text | default: true
+  assign overlay = overlay | default: false
+-%}
+
+{%- if overlay -%}
+  <div class="loading-overlay loading-overlay--active" data-loading-overlay>
+{%- endif -%}
+
+<div class="loading-state loading-state--{{ loading_type }} loading-state--{{ loading_size }}"
+     role="status"
+     aria-live="polite"
+     aria-label="{{ loading_text }}">
+
+  {%- case loading_type -%}
+    {%- when 'spinner' -%}
+      <div class="loading-spinner">
+        <div class="loading-spinner__circle"></div>
+      </div>
+
+    {%- when 'dots' -%}
+      <div class="loading-dots">
+        <span class="loading-dots__dot"></span>
+        <span class="loading-dots__dot"></span>
+        <span class="loading-dots__dot"></span>
+      </div>
+
+    {%- when 'pulse' -%}
+      <div class="loading-pulse">
+        <div class="loading-pulse__ring"></div>
+        <div class="loading-pulse__ring"></div>
+        <div class="loading-pulse__ring"></div>
+      </div>
+
+    {%- when 'bar' -%}
+      <div class="loading-bar">
+        <div class="loading-bar__progress"></div>
+      </div>
+
+    {%- when 'skeleton' -%}
+      <div class="loading-skeleton">
+        <div class="loading-skeleton__header"></div>
+        <div class="loading-skeleton__line"></div>
+        <div class="loading-skeleton__line loading-skeleton__line--short"></div>
+        <div class="loading-skeleton__line"></div>
+      </div>
+
+    {%- when 'product-card' -%}
+      <div class="loading-skeleton loading-skeleton--product">
+        <div class="loading-skeleton__image"></div>
+        <div class="loading-skeleton__content">
+          <div class="loading-skeleton__line loading-skeleton__line--title"></div>
+          <div class="loading-skeleton__line loading-skeleton__line--price"></div>
+        </div>
+      </div>
+
+    {%- when 'luxury' -%}
+      <div class="loading-luxury">
+        <div class="loading-luxury__diamond">
+          <div class="loading-luxury__facet"></div>
+          <div class="loading-luxury__facet"></div>
+          <div class="loading-luxury__facet"></div>
+          <div class="loading-luxury__facet"></div>
+        </div>
+      </div>
+  {%- endcase -%}
+
+  {%- if show_text -%}
+    <span class="loading-state__text {% if loading_type == 'skeleton' %}visually-hidden{% endif %}">
+      {{ loading_text }}
+    </span>
+  {%- endif -%}
+</div>
+
+{%- if overlay -%}
+  </div>
+{%- endif -%}
+
+<style>
+  /* Base Loading State */
+  .loading-state {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .loading-state--small { font-size: 0.875rem; }
+  .loading-state--medium { font-size: 1rem; }
+  .loading-state--large { font-size: 1.25rem; }
+
+  .loading-state__text {
+    color: var(--color-text-secondary);
+  }
+
+  /* Loading Overlay */
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .loading-overlay--active {
+    display: flex;
+  }
+
+  /* Spinner */
+  .loading-spinner {
+    width: 2em;
+    height: 2em;
+    position: relative;
+  }
+
+  .loading-spinner__circle {
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spinner-rotate 0.8s linear infinite;
+  }
+
+  @keyframes spinner-rotate {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Dots */
+  .loading-dots {
+    display: flex;
+    gap: 0.25em;
+  }
+
+  .loading-dots__dot {
+    width: 0.5em;
+    height: 0.5em;
+    background: var(--color-primary);
+    border-radius: 50%;
+    animation: dots-bounce 1.4s ease-in-out infinite both;
+  }
+
+  .loading-dots__dot:nth-child(1) { animation-delay: -0.32s; }
+  .loading-dots__dot:nth-child(2) { animation-delay: -0.16s; }
+
+  @keyframes dots-bounce {
+    0%, 80%, 100% {
+      transform: scale(0);
+      opacity: 0.5;
+    }
+    40% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* Pulse */
+  .loading-pulse {
+    position: relative;
+    width: 2em;
+    height: 2em;
+  }
+
+  .loading-pulse__ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--color-primary);
+    border-radius: 50%;
+    animation: pulse-ring 2s ease-in-out infinite;
+  }
+
+  .loading-pulse__ring:nth-child(2) { animation-delay: -0.5s; }
+  .loading-pulse__ring:nth-child(3) { animation-delay: -1s; }
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.5);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  /* Progress Bar */
+  .loading-bar {
+    width: 10em;
+    height: 4px;
+    background: var(--color-border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .loading-bar__progress {
+    height: 100%;
+    background: var(--color-primary);
+    animation: progress-bar 2s ease-in-out infinite;
+  }
+
+  @keyframes progress-bar {
+    0% {
+      width: 0%;
+      transform: translateX(0);
+    }
+    50% {
+      width: 100%;
+      transform: translateX(0);
+    }
+    100% {
+      width: 100%;
+      transform: translateX(100%);
+    }
+  }
+
+  /* Skeleton */
+  .loading-skeleton {
+    width: 100%;
+  }
+
+  .loading-skeleton__header,
+  .loading-skeleton__line,
+  .loading-skeleton__image {
+    background: linear-gradient(
+      90deg,
+      var(--color-border) 25%,
+      var(--color-background-secondary) 50%,
+      var(--color-border) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  .loading-skeleton__header {
+    height: 2em;
+    margin-bottom: 1em;
+  }
+
+  .loading-skeleton__line {
+    height: 1em;
+    margin-bottom: 0.5em;
+  }
+
+  .loading-skeleton__line--short {
+    width: 60%;
+  }
+
+  .loading-skeleton__line--title {
+    height: 1.25em;
+    width: 80%;
+  }
+
+  .loading-skeleton__line--price {
+    height: 1em;
+    width: 40%;
+  }
+
+  .loading-skeleton--product {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .loading-skeleton__image {
+    aspect-ratio: 1;
+    width: 100%;
+  }
+
+  @keyframes skeleton-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Luxury Diamond */
+  .loading-luxury {
+    width: 3em;
+    height: 3em;
+    position: relative;
+  }
+
+  .loading-luxury__diamond {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    animation: luxury-rotate 3s linear infinite;
+  }
+
+  .loading-luxury__facet {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background: var(--color-accent, #D4AF37);
+    opacity: 0.8;
+  }
+
+  .loading-luxury__facet:nth-child(1) {
+    top: 0;
+    left: 25%;
+    transform: rotate(45deg);
+    animation: luxury-shine 3s ease-in-out infinite;
+  }
+
+  .loading-luxury__facet:nth-child(2) {
+    bottom: 0;
+    left: 25%;
+    transform: rotate(45deg);
+    animation: luxury-shine 3s ease-in-out infinite 0.25s;
+  }
+
+  .loading-luxury__facet:nth-child(3) {
+    top: 25%;
+    left: 0;
+    transform: rotate(45deg);
+    animation: luxury-shine 3s ease-in-out infinite 0.5s;
+  }
+
+  .loading-luxury__facet:nth-child(4) {
+    top: 25%;
+    right: 0;
+    transform: rotate(45deg);
+    animation: luxury-shine 3s ease-in-out infinite 0.75s;
+  }
+
+  @keyframes luxury-rotate {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes luxury-shine {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+</style>
