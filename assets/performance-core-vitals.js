@@ -8,6 +8,8 @@ export class CoreVitalsModule {
     this.config = {
       preloadFonts: true,
       criticalCSS: true,
+      deferThirdParty: true,
+      serviceWorker: false,
       ...config
     };
   }
@@ -164,6 +166,7 @@ export class CoreVitalsModule {
   }
 
   deferNonCriticalJS() {
+    if (!this.config.deferThirdParty) return;
     window.addEventListener('load', () => {
       setTimeout(() => {
         this.loadThirdPartyScripts();
@@ -173,9 +176,9 @@ export class CoreVitalsModule {
 
   loadThirdPartyScripts() {
     const scripts = [
-      { src: '//www.google-analytics.com/analytics.js', async: true },
-      { src: '//connect.facebook.net/en_US/fbevents.js', async: true },
-      { src: '//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js', defer: true }
+      { src: 'https://www.google-analytics.com/analytics.js', async: true },
+      { src: 'https://connect.facebook.net/en_US/fbevents.js', async: true },
+      { src: 'https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js', defer: true }
     ];
 
     scripts.forEach(scriptConfig => {
@@ -231,9 +234,8 @@ export class CoreVitalsModule {
 
   addResourceHints() {
     const hints = [
-      { rel: 'prerender', href: '/collections/all' },
       { rel: 'prefetch', href: '/cart' },
-      { rel: 'dns-prefetch', href: '//ajax.googleapis.com' }
+      { rel: 'dns-prefetch', href: 'https://ajax.googleapis.com' }
     ];
 
     hints.forEach(hint => {
@@ -249,14 +251,14 @@ export class CoreVitalsModule {
       new PerformanceObserver((entryList) => {
         const entries = entryList.getEntries();
         const lastEntry = entries[entries.length - 1];
-        console.log('LCP:', lastEntry.renderTime || lastEntry.loadTime);
+        // LCP measured: lastEntry.renderTime || lastEntry.loadTime
       }).observe({ entryTypes: ['largest-contentful-paint'] });
 
       // Measure FID
       new PerformanceObserver((entryList) => {
         const entries = entryList.getEntries();
         entries.forEach(entry => {
-          console.log('FID:', entry.processingStart - entry.startTime);
+          // FID measured: entry.processingStart - entry.startTime
         });
       }).observe({ entryTypes: ['first-input'] });
 
@@ -266,7 +268,7 @@ export class CoreVitalsModule {
         for (const entry of entryList.getEntries()) {
           if (!entry.hadRecentInput) {
             clsValue += entry.value;
-            console.log('CLS:', clsValue);
+            // CLS measured: clsValue
           }
         }
       }).observe({ entryTypes: ['layout-shift'] });

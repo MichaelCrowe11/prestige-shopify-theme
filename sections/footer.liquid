@@ -3,7 +3,7 @@
   Author: Michael Benjamin Crowe
 {% endcomment %}
 
-<footer class="footer" data-section-id="{{ section.id }}" data-section-type="footer">
+<footer class="footer" role="contentinfo" data-section-id="{{ section.id }}" data-section-type="footer">
   <div class="container">
     {% if settings.show_newsletter %}
       <div class="footer__top">
@@ -11,17 +11,19 @@
           <h3 class="footer__newsletter-title">{{ 'footer.newsletter.title' | t }}</h3>
           <p class="footer__newsletter-subtitle">{{ 'footer.newsletter.subtitle' | t }}</p>
 
-          <form class="footer__newsletter-form" action="/contact" method="post" data-newsletter-form>
+          <form class="footer__newsletter-form" action="/contact" method="post" data-newsletter-form role="form" aria-label="Newsletter signup">
             <input type="hidden" name="form_type" value="customer">
             <input type="hidden" name="utf8" value="✓">
             <input type="hidden" name="contact[tags]" value="newsletter">
 
             <input type="email"
                    name="contact[email]"
+                   id="newsletter-email"
                    class="form__input footer__newsletter-input"
                    placeholder="{{ 'general.newsletter.email_placeholder' | t }}"
+                   aria-label="{{ 'general.newsletter.email_placeholder' | t }}"
                    required>
-            <button type="submit" class="button button--primary">
+            <button type="submit" class="button button--primary" aria-label="{{ 'general.newsletter.submit' | t }}">
               {{ 'general.newsletter.submit' | t }}
             </button>
           </form>

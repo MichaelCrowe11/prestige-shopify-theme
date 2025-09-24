@@ -35,14 +35,16 @@
   },
   {%- endif -%}
   "sameAs": [
-    {%- if settings.social_facebook_link != blank -%}"{{ settings.social_facebook_link }}",{%- endif -%}
-    {%- if settings.social_twitter_link != blank -%}"{{ settings.social_twitter_link }}",{%- endif -%}
-    {%- if settings.social_pinterest_link != blank -%}"{{ settings.social_pinterest_link }}",{%- endif -%}
-    {%- if settings.social_instagram_link != blank -%}"{{ settings.social_instagram_link }}",{%- endif -%}
-    {%- if settings.social_youtube_link != blank -%}"{{ settings.social_youtube_link }}",{%- endif -%}
-    {%- if settings.social_linkedin_link != blank -%}"{{ settings.social_linkedin_link }}",{%- endif -%}
-    ""
-  ].filter(Boolean).slice(0, -1),
+    {%- capture sameAs -%}
+      {%- if settings.social_facebook != blank -%}"{{ settings.social_facebook }}",{%- endif -%}
+      {%- if settings.social_twitter != blank -%}"{{ settings.social_twitter }}",{%- endif -%}
+      {%- if settings.social_pinterest != blank -%}"{{ settings.social_pinterest }}",{%- endif -%}
+      {%- if settings.social_instagram != blank -%}"{{ settings.social_instagram }}",{%- endif -%}
+      {%- if settings.social_youtube != blank -%}"{{ settings.social_youtube }}",{%- endif -%}
+      {%- if settings.social_tiktok != blank -%}"{{ settings.social_tiktok }}",{%- endif -%}
+    {%- endcapture -%}
+    {{ sameAs | remove_last: ',' }}
+  ],
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "customer service",

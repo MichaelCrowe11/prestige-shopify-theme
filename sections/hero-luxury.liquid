@@ -52,9 +52,9 @@
         {% if section.settings.luxury_badge != blank %}
           <div class="hero-luxury__badge" data-reveal>
             <span class="luxury-badge">
-              <span class="luxury-badge__icon">✦</span>
+              <span class="luxury-badge__icon" aria-hidden="true">✦</span>
               {{ section.settings.luxury_badge }}
-              <span class="luxury-badge__icon">✦</span>
+              <span class="luxury-badge__icon" aria-hidden="true">✦</span>
             </span>
           </div>
         {% endif %}
@@ -105,15 +105,15 @@
           <div class="hero-luxury__trust" data-reveal>
             <div class="trust-indicators">
               <div class="trust-indicator">
-                <span class="trust-icon">🏆</span>
+                <span class="trust-icon" aria-hidden="true">🏆</span>
                 <span class="trust-text">Award Winning</span>
               </div>
               <div class="trust-indicator">
-                <span class="trust-icon">✦</span>
+                <span class="trust-icon" aria-hidden="true">✦</span>
                 <span class="trust-text">Premium Quality</span>
               </div>
               <div class="trust-indicator">
-                <span class="trust-icon">🚚</span>
+                <span class="trust-icon" aria-hidden="true">🚚</span>
                 <span class="trust-text">Free Shipping</span>
               </div>
             </div>
@@ -129,7 +129,7 @@
         <div class="scroll-indicator">
           <span class="scroll-text">{{ 'general.accessibility.scroll' | t | default: 'Scroll to explore' }}</span>
           <div class="scroll-arrow">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
               <path d="M12 5v14M5 12l7 7 7-7"/>
             </svg>
           </div>

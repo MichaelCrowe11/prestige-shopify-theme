@@ -9,7 +9,10 @@
                    alt="{{ image.alt | escape }}"
                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
                    width="800"
-                   height="{{ 800 | divided_by: image.aspect_ratio }}">
+                   height="{{ 800 | divided_by: image.aspect_ratio }}"
+                   tabindex="0"
+                   role="button"
+                   aria-label="Zoom image: {{ image.alt | default: product.title | escape }}">
             </div>
           {% endfor %}
         </div>

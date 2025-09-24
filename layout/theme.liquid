@@ -27,7 +27,6 @@
     <meta name="description" content="{{ page_description | escape }}">
   {% endif %}
 
-  {% render 'meta-tags' %}
   {% render 'social-meta-tags' %}
   {% render 'structured-data' %}
   {% render 'analytics-integration' %}
@@ -35,6 +34,9 @@
   <script src="{{ 'global.js' | asset_url }}" defer></script>
   <script src="{{ 'prestige.js' | asset_url }}" defer></script>
   <script src="{{ 'prestige-compliant.js' | asset_url }}" defer></script>
+  {% if settings.performance_enable %}
+    <script src="{{ 'performance-main.js' | asset_url }}" defer></script>
+  {% endif %}
 
   {{ content_for_header }}
 
@@ -100,11 +102,35 @@
         addToCart: {{ 'products.product.add_to_cart' | t | json }},
         soldOut: {{ 'products.product.sold_out' | t | json }},
         unavailable: {{ 'products.product.unavailable' | t | json }},
-        cartEmpty: {{ 'cart.general.empty' | t | json }},
-        cartTermsConfirmation: {{ 'cart.general.terms_confirmation' | t | json }}
+          cartEmpty: {{ 'cart.general.empty' | t | json }},
+          cartTermsConfirmation: {{ 'cart.general.terms_confirmation' | t | json }},
+          adding: {{ 'products.product.adding' | t | default: 'Adding...' | json }},
+          added: {{ 'products.product.added' | t | default: 'Added!' | json }},
+          error: {{ 'general.accessibility.error' | t | default: 'Error' | json }},
+          tryAgainError: {{ 'general.messages.try_again' | t | default: 'Error - Please try again' | json }},
+          genericError: {{ 'general.messages.generic_error' | t | default: 'An error occurred. Please try again.' | json }},
+          searchNoResults: {{ 'general.search.no_results' | t | json }},
+          newsletterSubscribing: {{ 'general.newsletter.subscribing' | t | default: 'Subscribing...' | json }},
+          newsletterSuccess: {{ 'general.newsletter.success' | t | default: 'Thank you for subscribing!' | json }},
+          freeShippingProgress: {{ 'cart.general.free_shipping_progress' | t | json }},
+          freeShippingAchieved: {{ 'cart.general.free_shipping_achieved' | t | json }},
+          cartRemove: {{ 'cart.general.remove' | t | default: 'Remove' | json }},
+          wishlistRemove: {{ 'customer.general.wishlist_remove' | t | default: 'Remove from wishlist' | json }},
+          wishlistEmpty: {{ 'wishlist.general.empty' | t | default: 'Your wishlist is empty' | json }},
+          productLoadError: {{ 'products.product.load_error' | t | default: 'Failed to load product. Please try again.' | json }},
+          decreaseQuantity: {{ 'products.product.decrease_quantity' | t | default: 'Decrease quantity' | json }},
+          increaseQuantity: {{ 'products.product.increase_quantity' | t | default: 'Increase quantity' | json }},
+          zoomedImageAlt: {{ 'products.product.zoomed_image_alt' | t | default: 'Zoomed product image' | json }}
       },
       moneyFormat: {{ shop.money_format | json }},
-      cartType: {{ settings.cart_type | json }}
+      cartType: {{ settings.cart_type | json }},
+      performance: {
+        enabled: {{ settings.performance_enable | json }},
+        coreVitals: {{ settings.performance_core_vitals | json }},
+        lazyLoading: {{ settings.performance_lazy_loading | json }},
+        deferThirdParty: {{ settings.performance_defer_third_party | json }},
+        serviceWorker: {{ settings.performance_service_worker | json }}
+      }
     };
   </script>
 

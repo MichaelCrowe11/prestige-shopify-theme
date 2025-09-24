@@ -2,6 +2,18 @@
   "general": {
     "accessibility": {
       "skip_to_content": "Skip to content",
+      "zoom": "Zoom",
+      "share": "Share this product",
+      "include_taxes": "Tax included.",
+      "shipping_calculated": "Shipping calculated at checkout.",
+      "view_product": "View {{ product }}",
+      "quick_shop": "Quick shop",
+      "quick_shop_label": "Quick shop for {{ product }}",
+      "add_to_wishlist": "Add {{ product }} to wishlist",
+      "on_sale_percentage": "Save {{ percentage }}%",
+      "new_arrival": "New arrival",
+      "on_sale_label": "On sale - Save {{ discount }}",
+      "sold_out_label": "This item is sold out",
       "close": "Close",
       "open": "Open",
       "next": "Next",
@@ -94,7 +106,10 @@
       "on_sale_percentage": "Save {{ percentage }}%",
       "new_arrival": "New arrival",
       "on_sale_label": "On sale - Save {{ discount }}",
-      "sold_out_label": "This item is sold out"
+      "sold_out_label": "This item is sold out",
+      "decrease_quantity": "Decrease quantity",
+      "increase_quantity": "Increase quantity",
+      "zoomed_image_alt": "Zoomed product image"
     },
     "reviews": {
       "title": "Customer reviews",

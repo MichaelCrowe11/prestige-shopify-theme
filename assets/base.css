@@ -48,6 +48,20 @@ button {
   outline-offset: 2px;
 }
 
+.skip-to-content-link:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  background-color: var(--color-primary);
+  color: white;
+  text-decoration: none;
+  z-index: 9999;
+}
+
 .keyboard-nav *:focus {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;

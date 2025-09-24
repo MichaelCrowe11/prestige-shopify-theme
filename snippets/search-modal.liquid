@@ -14,15 +14,17 @@
     <div class="search-modal__content">
       <h2 class="search-modal__title">{{ 'general.search.title' | t | default: 'Search' }}</h2>
 
-      <form class="search-modal__form" action="{{ routes.search_url }}" method="get" data-search-form>
+      <form class="search-modal__form" action="{{ routes.search_url }}" method="get" data-search-form role="search" aria-label="Search products">
         <div class="search-modal__input-wrapper">
           <input type="search"
                  name="q"
+                 id="search-input"
                  class="search-modal__input"
                  placeholder="{{ 'general.search.placeholder' | t }}"
                  autocomplete="off"
+                 aria-label="{{ 'general.search.placeholder' | t }}"
                  data-search-input>
-          <button type="submit" class="search-modal__submit">
+          <button type="submit" class="search-modal__submit" aria-label="{{ 'general.search.submit' | t }}">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="8"/>
               <path d="M21 21l-4.35-4.35"/>

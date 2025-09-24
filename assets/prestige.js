@@ -7,6 +7,21 @@
 (function() {
   'use strict';
 
+  // Simple i18n helpers
+  const STR = (window.theme && window.theme.strings) || {};
+  const s = (key, fallback = '') => (typeof STR[key] === 'string' && STR[key]) || fallback || key;
+  const interpolate = (str, ...vals) => typeof str === 'string' ? str.replace(/%s/g, () => vals.shift() ?? '') : undefined;
+  const replacePlaceholders = (str, map) => {
+    if (typeof str !== 'string') return undefined;
+    return str.replace(/\{\{\s*(\w+)\s*\}\}/g, (m, key) => (key in map ? map[key] : m));
+  };
+  const escapeHtml = (unsafe) => String(unsafe)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
   const Prestige = {
     settings: {
       animationDuration: 400,
@@ -73,8 +88,10 @@
 
       if (mobileMenuToggle && mobileMenu) {
         mobileMenuToggle.addEventListener('click', () => {
+          const isOpen = mobileMenu.classList.contains('is-open');
           mobileMenu.classList.toggle('is-open');
           document.body.classList.toggle('menu-open');
+          mobileMenuToggle.setAttribute('aria-expanded', !isOpen);
         });
       }
     },
@@ -102,8 +119,33 @@
 
     toggleCart() {
       if (this.cartDrawer) {
-        this.cartDrawer.classList.toggle('is-open');
-        document.body.classList.toggle('cart-open');
+        const isOpen = this.cartDrawer.classList.contains('is-open');
+        if (isOpen) {
+          this.closeCart();
+        } else {
+          this.openCart();
+        }
+      }
+    },
+
+    openCart() {
+      if (this.cartDrawer) {
+        // Store the currently focused element for restoration
+        this.lastFocusedElement = document.activeElement;
+
+        this.cartDrawer.classList.add('is-open');
+        document.body.classList.add('cart-open');
+
+        const focusableElements = this.cartDrawer.querySelectorAll(
+          'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
+        );
+
+        if (focusableElements.length) {
+          focusableElements[0].focus();
+        }
+
+        // Add focus trapping
+        this.setupFocusTrap(this.cartDrawer);
       }
     },
 
@@ -111,6 +153,14 @@
       if (this.cartDrawer) {
         this.cartDrawer.classList.remove('is-open');
         document.body.classList.remove('cart-open');
+
+        // Remove focus trap
+        this.removeFocusTrap(this.cartDrawer);
+
+        // Restore focus to the last focused element
+        if (this.lastFocusedElement) {
+          this.lastFocusedElement.focus();
+        }
       }
     },
 
@@ -165,11 +215,11 @@
             ${item.variant_title ? `<p class="cart-drawer__item-variant">${item.variant_title}</p>` : ''}
             <p class="cart-drawer__item-price">${this.formatMoney(item.price)}</p>
             <div class="cart-drawer__item-quantity">
-              <button data-quantity-decrease data-item-key="${item.key}">-</button>
+              <button data-quantity-decrease data-item-key="${item.key}" aria-label="${s('decreaseQuantity', 'Decrease quantity')}">-</button>
               <input type="number" value="${item.quantity}" min="1" data-quantity-input data-item-key="${item.key}">
-              <button data-quantity-increase data-item-key="${item.key}">+</button>
+              <button data-quantity-increase data-item-key="${item.key}" aria-label="${s('increaseQuantity', 'Increase quantity')}">+</button>
             </div>
-            <a href="#" class="cart-drawer__item-remove" data-cart-remove="${item.key}">Remove</a>
+            <a href="#" class="cart-drawer__item-remove" data-cart-remove="${item.key}">${s('cartRemove', 'Remove')}</a>
           </div>
         </div>
       `;
@@ -180,7 +230,7 @@
 
       const itemsContainer = this.cartDrawer.querySelector('[data-cart-items]');
       if (itemsContainer) {
-        itemsContainer.innerHTML = '<p class="cart-drawer__empty">Your cart is empty</p>';
+        itemsContainer.innerHTML = `<p class="cart-drawer__empty">${s('cartEmpty', 'Your cart is empty')}</p>`;
       }
     },
 
@@ -194,12 +244,14 @@
       if (remaining > 0) {
         const percentage = (totalPrice / threshold) * 100;
         freeShippingBar.querySelector('[data-progress]').style.width = `${percentage}%`;
-        freeShippingBar.querySelector('[data-message]').textContent =
-          `You're ${this.formatMoney(remaining)} away from free shipping!`;
+        const msg = replacePlaceholders(STR.freeShippingProgress, { amount: this.formatMoney(remaining) })
+          || interpolate(STR.freeShippingProgress, this.formatMoney(remaining))
+          || `You're ${this.formatMoney(remaining)} away from free shipping!`;
+        freeShippingBar.querySelector('[data-message]').textContent = msg;
       } else {
         freeShippingBar.querySelector('[data-progress]').style.width = '100%';
         freeShippingBar.querySelector('[data-message]').textContent =
-          "You've qualified for free shipping!";
+          s('freeShippingAchieved', "You've qualified for free shipping!");
       }
     },
 
@@ -237,7 +289,7 @@
       const submitButton = form.querySelector('[type="submit"]');
       const originalText = submitButton.textContent;
 
-      submitButton.textContent = 'Adding...';
+      submitButton.textContent = s('adding', 'Adding...');
       submitButton.disabled = true;
 
       try {
@@ -250,7 +302,7 @@
         if (response.ok) {
           const item = await response.json();
 
-          submitButton.textContent = 'Added!';
+          submitButton.textContent = s('added', 'Added!');
 
           await this.updateCart();
 
@@ -269,7 +321,7 @@
         }
       } catch (error) {
         console.error('Error adding to cart:', error);
-        submitButton.textContent = 'Error';
+        submitButton.textContent = s('error', 'Error');
 
         setTimeout(() => {
           submitButton.textContent = originalText;
@@ -361,7 +413,7 @@
 
       if (submitButton) {
         submitButton.disabled = !available;
-        submitButton.textContent = available ? 'Add to cart' : 'Sold out';
+        submitButton.textContent = available ? s('addToCart', 'Add to cart') : s('soldOut', 'Sold out');
       }
     },
 
@@ -415,6 +467,13 @@
         image.addEventListener('click', () => {
           this.openImageZoom(image.src);
         });
+
+        image.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.openImageZoom(image.src);
+          }
+        });
       });
     },
 
@@ -424,7 +483,7 @@
       modal.innerHTML = `
         <div class="modal__inner">
           <button class="modal__close" data-modal-close>&times;</button>
-          <img src="${imageSrc}" alt="Zoomed product image">
+          <img src="${imageSrc}" alt="${s('zoomedImageAlt', 'Zoomed product image')}">
         </div>
       `;
 
@@ -463,6 +522,9 @@
       const modal = document.querySelector(`[data-modal="${modalId}"]`);
 
       if (modal) {
+        // Store the currently focused element for restoration
+        this.lastFocusedElement = document.activeElement;
+
         modal.classList.add('is-open');
         document.body.classList.add('modal-open');
 
@@ -473,6 +535,9 @@
         if (focusableElements.length) {
           focusableElements[0].focus();
         }
+
+        // Add focus trapping
+        this.setupFocusTrap(modal);
       }
     },
 
@@ -480,6 +545,53 @@
       if (modal) {
         modal.classList.remove('is-open');
         document.body.classList.remove('modal-open');
+
+        // Remove focus trap
+        this.removeFocusTrap(modal);
+
+        // Restore focus to the last focused element
+        if (this.lastFocusedElement) {
+          this.lastFocusedElement.focus();
+        }
+      }
+    },
+
+    setupFocusTrap(modal) {
+      const focusableElements = modal.querySelectorAll(
+        'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
+      );
+
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      const handleTabKey = (e) => {
+        if (e.key !== 'Tab') return;
+
+        if (e.shiftKey) {
+          // Shift + Tab
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          // Tab
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      };
+
+      modal.addEventListener('keydown', handleTabKey);
+      modal._focusTrapHandler = handleTabKey;
+    },
+
+    removeFocusTrap(modal) {
+      if (modal._focusTrapHandler) {
+        modal.removeEventListener('keydown', modal._focusTrapHandler);
+        delete modal._focusTrapHandler;
       }
     },
 
@@ -492,8 +604,7 @@
 
       if (searchToggle && searchModal) {
         searchToggle.addEventListener('click', () => {
-          searchModal.classList.add('is-open');
-          searchInput?.focus();
+          this.openModal('search');
         });
       }
 
@@ -539,11 +650,13 @@
             </a>
           `).join('');
         } else {
-          resultsContainer.innerHTML = `<p class="no-results">No results found for "${query}"</p>`;
+          const q = escapeHtml(query);
+          const base = s('searchNoResults', 'No results found');
+          resultsContainer.innerHTML = `<p class="no-results">${base} ${q ? `for &quot;${q}&quot;` : ''}</p>`;
         }
       } catch (error) {
         console.error('Search error:', error);
-        resultsContainer.innerHTML = '<p class="error">An error occurred. Please try again.</p>';
+        resultsContainer.innerHTML = `<p class="error">${s('genericError', 'An error occurred. Please try again.')}</p>`;
       }
     },
 
@@ -558,7 +671,7 @@
           const button = form.querySelector('[type="submit"]');
           const originalText = button.textContent;
 
-          button.textContent = 'Subscribing...';
+          button.textContent = s('newsletterSubscribing', 'Subscribing...');
           button.disabled = true;
 
           try {
@@ -571,13 +684,13 @@
             });
 
             if (response.ok) {
-              form.innerHTML = '<p class="success">Thank you for subscribing!</p>';
+              form.innerHTML = `<p class="success">${s('newsletterSuccess', 'Thank you for subscribing!')}</p>`;
             } else {
               throw new Error('Subscription failed');
             }
           } catch (error) {
             console.error('Newsletter error:', error);
-            button.textContent = 'Error - Please try again';
+            button.textContent = s('tryAgainError', 'Error - Please try again');
 
             setTimeout(() => {
               button.textContent = originalText;
@@ -666,13 +779,13 @@
                 <h3><a href="${product.url}">${product.title}</a></h3>
                 <p class="wishlist-item__price">${product.price}</p>
                 <button data-wishlist-toggle data-product-id="${product.id}">
-                  Remove from wishlist
+                  ${s('wishlistRemove', 'Remove from wishlist')}
                 </button>
               </div>
             </div>
           `).join('');
         } else {
-          wishlistContainer.innerHTML = '<p>Your wishlist is empty</p>';
+          wishlistContainer.innerHTML = `<p>${s('wishlistEmpty', 'Your wishlist is empty')}</p>`;
         }
       }
     },
@@ -708,7 +821,7 @@
         this.initProductMedia();
       } catch (error) {
         console.error('Quick shop error:', error);
-        content.innerHTML = '<p class="error">Failed to load product. Please try again.</p>';
+        content.innerHTML = `<p class="error">${s('productLoadError', 'Failed to load product. Please try again.')}</p>`;
       }
     },
 

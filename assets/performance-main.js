@@ -8,6 +8,7 @@ import { CoreVitalsModule } from './performance-core-vitals.js';
 
 class PerformanceOptimizer {
   constructor() {
+    const perf = (window.theme && window.theme.performance) || {};
     this.config = {
       lazyLoadOffset: 50,
       imageSizes: {
@@ -18,13 +19,15 @@ class PerformanceOptimizer {
       criticalCSS: true,
       preloadFonts: true,
       prefetchLinks: true,
-      serviceWorker: true
+      serviceWorker: !!perf.serviceWorker,
+      enableCoreVitals: perf.coreVitals !== false,
+      enableLazyLoading: perf.lazyLoading !== false,
+      deferThirdParty: perf.deferThirdParty !== false
     };
 
-    this.modules = {
-      lazyLoading: new LazyLoadingModule(this.config),
-      coreVitals: new CoreVitalsModule(this.config)
-    };
+    this.modules = {};
+    if (this.config.enableLazyLoading) this.modules.lazyLoading = new LazyLoadingModule(this.config);
+    if (this.config.enableCoreVitals) this.modules.coreVitals = new CoreVitalsModule(this.config);
 
     this.init();
   }
@@ -123,15 +126,15 @@ class PerformanceOptimizer {
   }
 
   initServiceWorker() {
-    if (!this.config.serviceWorker || !('serviceWorker' in navigator)) return;
+  if (!this.config.serviceWorker || !('serviceWorker' in navigator)) return;
 
     if (window.location.protocol === 'https:') {
       navigator.serviceWorker.register('/sw.js')
         .then(registration => {
-          console.log('Service Worker registered:', registration);
+          // Service Worker registered successfully
         })
         .catch(error => {
-          console.error('Service Worker registration failed:', error);
+          // Service Worker registration failed
         });
     }
   }
@@ -140,7 +143,9 @@ class PerformanceOptimizer {
     if (this.supportsWebP()) {
       this.convertToWebP();
     }
-    this.modules.lazyLoading.generateResponsiveImages();
+    if (this.modules.lazyLoading) {
+      this.modules.lazyLoading.generateResponsiveImages();
+    }
   }
 
   supportsWebP() {

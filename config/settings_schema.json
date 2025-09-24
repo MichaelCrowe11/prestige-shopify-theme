@@ -336,6 +336,41 @@
     ]
   },
   {
+    "name": "Performance",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "performance_enable",
+        "label": "Enable performance optimizer",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "performance_core_vitals",
+        "label": "Enable Core Web Vitals module",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "performance_lazy_loading",
+        "label": "Enable Lazy Loading module",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "performance_defer_third_party",
+        "label": "Defer third-party scripts to after load",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "performance_service_worker",
+        "label": "Register service worker (HTTPS only)",
+        "default": false
+      }
+    ]
+  },
+  {
     "name": "Social media",
     "settings": [
       {

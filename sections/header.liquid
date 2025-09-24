@@ -3,17 +3,17 @@
   Author: Michael Benjamin Crowe
 {% endcomment %}
 
-<header class="header{% if settings.sticky_header %} header--sticky{% endif %}{% if settings.transparent_header and template == 'index' %} header--transparent{% endif %}" data-section-id="{{ section.id }}" data-section-type="header">
+<header class="header{% if settings.sticky_header %} header--sticky{% endif %}{% if settings.transparent_header and template == 'index' %} header--transparent{% endif %}" role="banner" data-section-id="{{ section.id }}" data-section-type="header">
   <div class="container">
     <div class="header__inner">
       <div class="header__left">
-        <button class="header__menu-toggle show-mobile" data-mobile-menu-toggle aria-label="Open menu">
+        <button class="header__menu-toggle show-mobile" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12h18M3 6h18M3 18h18"/>
           </svg>
         </button>
 
-        <nav class="header__nav hide-mobile">
+        <nav class="header__nav hide-mobile" role="navigation" aria-label="Main navigation">
           {% for link in linklists[section.settings.menu].links %}
             <a href="{{ link.url }}" class="header__nav-item{% if link.active %} is-active{% endif %}">
               {{ link.title }}
@@ -60,7 +60,7 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
-            <span class="header__action-count" data-wishlist-count style="display: none;">0</span>
+            <span class="header__action-count" data-wishlist-count aria-live="polite" style="display: none;">0</span>
           </button>
 
           <button class="header__action" data-cart-toggle aria-label="Cart">
@@ -69,7 +69,7 @@
               <path d="M3 9h18v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
               <path d="M12 9v6"/>
             </svg>
-            <span class="header__action-count" data-cart-count style="display: none;">0</span>
+            <span class="header__action-count" data-cart-count aria-live="polite" style="display: none;">0</span>
           </button>
         </div>
       </div>
@@ -93,10 +93,10 @@
   {% endif %}
 </header>
 
-<nav class="mobile-menu" data-mobile-menu>
+<nav class="mobile-menu" data-mobile-menu role="navigation" aria-label="Mobile navigation">
   <div class="mobile-menu__header">
     <h3>Menu</h3>
-    <button class="mobile-menu__close" data-mobile-menu-close>
+    <button class="mobile-menu__close" data-mobile-menu-close aria-label="Close menu">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M18 6L6 18M6 6l12 12"/>
       </svg>
@@ -127,18 +127,6 @@
 </nav>
 
 <style>
-  .announcement-bar {
-    text-align: center;
-    padding: 0.5rem 0;
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  .announcement-bar__link {
-    color: inherit;
-    text-decoration: none;
-  }
-
   .header__logo-text {
     font-size: 1.5rem;
     font-weight: 600;
