@@ -54,7 +54,7 @@
       <span class="badge badge--sale" aria-label="{{ 'products.product.on_sale_percentage' | t: percentage: sale_percentage }}">
         -{{ sale_percentage }}%
       </span>
-    {% elsif product.created_at > 30 | days | ago %}
+    {% elsif product.created_at > 30.days.ago %}
       <span class="badge badge--new" aria-label="{{ 'products.product.new_arrival' | t }}">{{ 'products.product.new' | t }}</span>
     {% endif %}
 
