@@ -1,8 +1,19 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "hero-luxury",
       "settings": {
+        "hero_image": "shopify://shop_images/Untitled_design-3_2e751dd2-d9c0-4fbf-80e6-8c13177ae329.png",
+        "video_url": "",
         "luxury_badge": "Exclusive Collection",
         "heading": "Luxury Redefined",
         "subheading": "Experience the Pinnacle of Elegance",
@@ -18,6 +29,8 @@
         "text_color": "#ffffff",
         "gradient_color_1": "#1a1a1a",
         "gradient_color_2": "#2d2d2d",
+        "overlay_color_1": "#00000066",
+        "overlay_color_2": "#00000033",
         "overlay_opacity": 40,
         "show_particles": true,
         "show_scroll_indicator": true,
@@ -29,31 +42,44 @@
       "settings": {
         "heading": "Featured Collection",
         "subheading": "Best Sellers",
+        "heading_alignment": "center",
+        "collection": "mushroom-powders",
         "products_to_show": 4,
         "products_per_row": 4,
+        "show_view_all": true,
+        "show_carousel": true,
         "show_quick_add": true,
         "show_second_image": true,
-        "show_color_swatches": true
+        "show_vendor": false,
+        "show_rating": true,
+        "show_color_swatches": true,
+        "background_color": "#ffffff"
       }
     },
     "collection_showcase": {
       "type": "collection-list",
       "settings": {
         "heading": "Shop by Category",
+        "subheading": "",
         "collections_to_show": 3
       }
     },
     "testimonials": {
       "type": "testimonials",
       "settings": {
-        "heading": "What Our Customers Say"
+        "heading": "What Our Customers Say",
+        "subheading": ""
       }
     },
     "newsletter": {
       "type": "newsletter",
       "settings": {
         "heading": "Stay in Touch",
-        "subheading": "Subscribe to receive exclusive offers and the latest news"
+        "subheading": "Subscribe to receive exclusive offers and the latest news",
+        "show_privacy_text": true,
+        "privacy_text": "We respect your privacy and will never share your email address.",
+        "show_social_links": true,
+        "social_title": "Follow us"
       }
     }
   },
