@@ -2,7 +2,7 @@
   "theme": {
     "name": "Prestige",
     "version": "1.0.0",
-    "release_date": "2025-09-22",
+    "release_date": "2026-02-22",
     "author": "Michael Benjamin Crowe",
     "support_email": "support@prestige-theme.com",
     "documentation_url": "https://prestige-theme.com/docs",
@@ -32,15 +32,8 @@
       "store_locator": false
     },
     "performance": {
-      "lighthouse_score": 100,
-      "page_speed_mobile": 95,
-      "page_speed_desktop": 98,
-      "first_contentful_paint": "0.8s",
-      "largest_contentful_paint": "1.2s",
-      "time_to_interactive": "1.5s",
-      "cumulative_layout_shift": 0.02,
-      "first_input_delay": "50ms",
-      "total_blocking_time": "100ms"
+      "target_lighthouse_score": 90,
+      "optimizations": ["lazy-loading", "code-splitting", "critical-css", "resource-hints", "deferred-scripts"]
     },
     "compatibility": {
       "browsers": {
@@ -88,7 +81,7 @@
     "changelog": [
       {
         "version": "1.0.0",
-        "date": "2025-09-22",
+        "date": "2026-02-22",
         "changes": [
           "Initial release",
           "100/100 optimization score",

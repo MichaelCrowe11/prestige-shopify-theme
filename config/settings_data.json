@@ -32,9 +32,9 @@
     "show_cart_note": true,
     "show_free_shipping_bar": true,
     "free_shipping_threshold": 100,
-    "social_facebook": "https://facebook.com/shopify",
-    "social_instagram": "https://instagram.com/shopify",
-    "social_twitter": "https://twitter.com/shopify",
+    "social_facebook": "",
+    "social_instagram": "",
+    "social_twitter": "",
     "favicon": "",
     "show_announcement_bar": true,
     "announcement_text": "Free shipping on orders over $100",
@@ -79,8 +79,8 @@
             "type": "contact",
             "settings": {
               "title": "Contact",
-              "email": "contact@prestige.com",
-              "phone": "1-800-PRESTIGE"
+              "email": "",
+              "phone": ""
             }
           }
         },

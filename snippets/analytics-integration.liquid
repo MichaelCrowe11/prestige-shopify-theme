@@ -278,10 +278,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       window.analytics.track(eventName, eventData);
     }
 
-    // Console log in development
-    if (window.location.hostname === 'localhost' || window.location.hostname.includes('.myshopify.com')) {
-      console.log('Track Event:', eventName, eventData);
-    }
   };
 </script>
 

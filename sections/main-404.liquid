@@ -1,0 +1,38 @@
+{% comment %}
+  404 Error Page Section
+{% endcomment %}
+
+<section class="page-404 section section-{{ section.id }}">
+  <div class="container">
+    <div class="page-404__content">
+      <h1 class="page-404__heading">{{ 'general.404.title' | t | default: 'Page not found' }}</h1>
+      <p class="page-404__text">{{ 'general.404.subtext' | t | default: 'The page you were looking for does not exist.' }}</p>
+      <a href="/" class="btn btn--primary">{{ 'general.404.link' | t | default: 'Continue shopping' }}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-404 {
+    padding: calc(var(--section-spacing) * 2) 0;
+    text-align: center;
+  }
+
+  .page-404__heading {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1rem;
+  }
+
+  .page-404__text {
+    font-size: 1.125rem;
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "404 page",
+  "settings": []
+}
+{% endschema %}

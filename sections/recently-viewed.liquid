@@ -1,0 +1,144 @@
+{% comment %}
+  Recently Viewed Products Section
+  Tracks visited products via localStorage and renders them client-side
+{% endcomment %}
+
+<section class="recently-viewed section section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="recently-viewed" style="display:none;">
+  <div class="container">
+    <div class="section__header">
+      {% if section.settings.heading != blank %}
+        <h2 class="section__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+    </div>
+
+    <div class="recently-viewed__grid grid grid--4-col" data-recently-viewed-grid>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    var STORAGE_KEY = 'prestige:recently-viewed';
+    var MAX_PRODUCTS = 20;
+
+    function getRecentlyViewed() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function trackProduct() {
+      var meta = document.querySelector('meta[property="og:type"][content="product"]');
+      if (!meta) return;
+
+      var handle = window.location.pathname.split('/products/')[1];
+      if (!handle) return;
+      handle = handle.split('?')[0].split('#')[0];
+
+      var items = getRecentlyViewed();
+      items = items.filter(function(h) { return h !== handle; });
+      items.unshift(handle);
+      items = items.slice(0, MAX_PRODUCTS);
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      } catch (e) {}
+    }
+
+    function createProductCard(product) {
+      var card = document.createElement('div');
+      card.className = 'card product-card';
+
+      var link = document.createElement('a');
+      link.href = '/products/' + encodeURIComponent(product.handle);
+      link.className = 'card__link';
+
+      var imageWrap = document.createElement('div');
+      imageWrap.className = 'card__image';
+
+      if (product.featured_image) {
+        var img = document.createElement('img');
+        img.src = product.featured_image;
+        img.alt = product.title;
+        img.loading = 'lazy';
+        img.width = 400;
+        img.height = 400;
+        imageWrap.appendChild(img);
+      }
+
+      var content = document.createElement('div');
+      content.className = 'card__content';
+
+      var title = document.createElement('h3');
+      title.className = 'card__title';
+      title.textContent = product.title;
+
+      var price = document.createElement('p');
+      price.className = 'card__price';
+      var amount = (product.price / 100).toFixed(2);
+      price.textContent = '$' + amount;
+
+      content.appendChild(title);
+      content.appendChild(price);
+      link.appendChild(imageWrap);
+      link.appendChild(content);
+      card.appendChild(link);
+
+      return card;
+    }
+
+    function renderRecentlyViewed() {
+      var section = document.querySelector('.recently-viewed');
+      var grid = document.querySelector('[data-recently-viewed-grid]');
+      if (!section || !grid) return;
+
+      var items = getRecentlyViewed();
+      var currentHandle = window.location.pathname.split('/products/')[1];
+      if (currentHandle) {
+        currentHandle = currentHandle.split('?')[0].split('#')[0];
+        items = items.filter(function(h) { return h !== currentHandle; });
+      }
+
+      items = items.slice(0, 4);
+      if (items.length === 0) return;
+
+      var fetches = items.map(function(handle) {
+        return fetch('/products/' + encodeURIComponent(handle) + '.js')
+          .then(function(r) { return r.json(); })
+          .catch(function() { return null; });
+      });
+
+      Promise.all(fetches).then(function(products) {
+        products = products.filter(Boolean);
+        if (products.length === 0) return;
+
+        products.forEach(function(product) {
+          grid.appendChild(createProductCard(product));
+        });
+
+        section.style.display = '';
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      trackProduct();
+      renderRecentlyViewed();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Recently viewed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recently Viewed"
+    }
+  ]
+}
+{% endschema %}

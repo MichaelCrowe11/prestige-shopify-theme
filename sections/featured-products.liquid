@@ -139,9 +139,11 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const carousel = document.querySelector('.section-{{ section.id }} [data-carousel]');
+    var carousel = document.querySelector('.section-{{ section.id }} [data-carousel]');
+    if (!carousel) return;
 
-    if (carousel && typeof Swiper !== 'undefined') {
+    function initSwiper() {
+      if (typeof Swiper === 'undefined') return;
       new Swiper(carousel, {
         slidesPerView: 1.2,
         spaceBetween: 20,
@@ -168,6 +170,20 @@
           }
         }
       });
+    }
+
+    if (typeof Swiper !== 'undefined') {
+      initSwiper();
+    } else {
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
+      document.head.appendChild(link);
+
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+      script.onload = initSwiper;
+      document.head.appendChild(script);
     }
   });
 </script>

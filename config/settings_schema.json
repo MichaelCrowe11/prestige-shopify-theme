@@ -90,6 +90,16 @@
         "default": 36
       },
       {
+        "type": "select",
+        "id": "type_header_font_weight",
+        "label": "Font weight",
+        "options": [
+          { "value": "normal", "label": "Normal" },
+          { "value": "bold", "label": "Bold" }
+        ],
+        "default": "normal"
+      },
+      {
         "type": "header",
         "content": "Body font"
       },
@@ -336,6 +346,55 @@
     ]
   },
   {
+    "name": "Animations",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "animations_enabled",
+        "label": "Enable animations",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Analytics",
+    "settings": [
+      {
+        "type": "text",
+        "id": "google_analytics_id",
+        "label": "Google Analytics ID",
+        "info": "Legacy Universal Analytics (UA-XXXXX)"
+      },
+      {
+        "type": "text",
+        "id": "ga4_measurement_id",
+        "label": "GA4 Measurement ID",
+        "info": "Google Analytics 4 (G-XXXXX)"
+      },
+      {
+        "type": "text",
+        "id": "facebook_pixel_id",
+        "label": "Facebook Pixel ID"
+      },
+      {
+        "type": "text",
+        "id": "gtm_container_id",
+        "label": "Google Tag Manager ID",
+        "info": "GTM-XXXXX"
+      },
+      {
+        "type": "text",
+        "id": "pinterest_tag_id",
+        "label": "Pinterest Tag ID"
+      },
+      {
+        "type": "text",
+        "id": "tiktok_pixel_id",
+        "label": "TikTok Pixel ID"
+      }
+    ]
+  },
+  {
     "name": "Performance",
     "settings": [
       {
@@ -402,6 +461,55 @@
         "type": "text",
         "id": "social_tiktok",
         "label": "TikTok URL"
+      }
+    ]
+  },
+  {
+    "name": "SEO & sharing",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "og_image",
+        "label": "Default social sharing image",
+        "info": "1200 x 630px recommended"
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Default share image"
+      },
+      {
+        "type": "text",
+        "id": "facebook_domain_verification",
+        "label": "Facebook domain verification",
+        "info": "Meta tag content for domain verification"
+      },
+      {
+        "type": "text",
+        "id": "pinterest_verification",
+        "label": "Pinterest site verification"
+      }
+    ]
+  },
+  {
+    "name": "Advanced",
+    "settings": [
+      {
+        "type": "html",
+        "id": "custom_scripts",
+        "label": "Custom scripts",
+        "info": "Added before closing body tag"
+      },
+      {
+        "type": "text",
+        "id": "default_size_chart_type",
+        "label": "Default size chart type",
+        "default": "clothing"
+      },
+      {
+        "type": "html",
+        "id": "default_size_chart",
+        "label": "Default size chart HTML"
       }
     ]
   },

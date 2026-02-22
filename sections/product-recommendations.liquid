@@ -1,0 +1,73 @@
+{% comment %}
+  Product Recommendations Section
+  Uses Shopify's native product recommendations API
+{% endcomment %}
+
+<section class="product-recommendations section section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="product-recommendations" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}">
+  {% if recommendations.performed and recommendations.products_count > 0 %}
+    <div class="container">
+      <div class="section__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="section__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+      </div>
+
+      <div class="product-recommendations__grid grid grid--4-col">
+        {% for product in recommendations.products %}
+          {% render 'product-card', product: product %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var section = document.querySelector('.product-recommendations[data-url]');
+    if (!section) return;
+
+    var url = section.dataset.url;
+
+    fetch(url)
+      .then(function(response) { return response.text(); })
+      .then(function(text) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(text, 'text/html');
+        var fresh = doc.querySelector('.product-recommendations');
+        if (fresh && fresh.childNodes.length > 0) {
+          while (section.firstChild) {
+            section.removeChild(section.firstChild);
+          }
+          while (fresh.firstChild) {
+            section.appendChild(document.adoptNode(fresh.firstChild));
+          }
+        }
+      })
+      .catch(function(err) {
+        console.error('Product recommendations failed to load:', err);
+      });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    }
+  ]
+}
+{% endschema %}
