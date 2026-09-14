@@ -13,9 +13,9 @@
   if product.metafields.custom.size_chart != blank
     assign has_size_chart = true
     assign size_chart = product.metafields.custom.size_chart
-  elsif product.type != blank and settings[product.type | handleize | append: '_size_chart'] != blank
+  elsif product.type != blank and settings.product.type
     assign has_size_chart = true
-    assign size_chart = settings[product.type | handleize | append: '_size_chart']
+    assign size_chart = settings.product.type | handleize | append: '_size_chart'
   elsif settings.default_size_chart != blank
     assign has_size_chart = true
     assign size_chart = settings.default_size_chart
@@ -315,4 +315,17 @@
     });
   });
 </script>
-{%- endif -%}
+{%- endif -%}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "  elsif product.type != blank and settings[product.type | handleize | append:
+    '_size_chart'] != blank"
+  to: "  elsif product.type != blank and settings.product.type"
+  position: 441..496
+- from: "    assign size_chart = settings[product.type | handleize | append: '_size_chart']"
+  to: "    assign size_chart = settings.product.type | handleize | append: '_size_chart'"
+  position: 530..611
+{%- endcomment -%}
